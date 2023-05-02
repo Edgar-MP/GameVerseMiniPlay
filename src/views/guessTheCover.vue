@@ -118,15 +118,20 @@ const nextPhase = () => {
 
 // Método para omitir un intento
 const omitir = () => {
-    if (localStorage.getItem("guessTheCoverHearts") === "0") {
+    if (localStorage.getItem("guessTheCoverHearts") === "1") {
+        console.log("Omiciooon");
+        nextPhase()
+        loadImg(getImg());
+        removeHeart();
         document.getElementById("clues").style.display = "block";
         document.getElementById("playableBtns").style.display = "none";
         document.getElementById("results").style.display = "block";
         document.getElementById("hearts").style.display = "none";
-    } 
-    nextPhase()
-    loadImg(getImg());
-    removeHeart();
+    } else {
+        nextPhase()
+        loadImg(getImg());
+        removeHeart();
+    }
 }
 
 
