@@ -22,7 +22,7 @@
             <br>
             <div class="flex justify-center justify-items-center">
                 <router-link to="/guess-the-screenshoot">
-                    <button class="minecraft-btn mx-auto w-64 text-center text-white truncate px-4 py-1 border-2 border-b-4 hover:text-yellow-200">Jugar!</button>
+                    <button disabled class="minecraft-btn mx-auto w-64 text-center text-white truncate px-4 py-1 border-2 border-b-4 hover:text-yellow-200">Proximamente!</button>
                 </router-link>
             </div>
         </article>
