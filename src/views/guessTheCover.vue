@@ -433,7 +433,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
 });
 
-
 // Funciones para el autocompletado
 
 function autocomplete(inp, arr) {
@@ -442,6 +441,8 @@ function autocomplete(inp, arr) {
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function (e) {
+    alert("hola")
+
         var a, b, i, val = this.value;
         /*close any already open lists of autocompleted values*/
         closeAllLists();
