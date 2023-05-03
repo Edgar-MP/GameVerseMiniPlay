@@ -284,7 +284,11 @@ mounted: {
         localStorage.guessTheCoverLoadNewGame = true;
         localStorage.setItem("guessTheCoverPhase", 0);
         localStorage.guessTheCoverHearts = 4;
-
+        getGamesTitles().then(e => {
+            // console.log("autocomplete loading");
+            autocomplete(document.getElementById("myInput"), e);
+            // console.log("autocomplete loaded");
+        })
         loadGamesInLocalStorage();
         // console.log("Primera vez que entro :D");
     } else {
