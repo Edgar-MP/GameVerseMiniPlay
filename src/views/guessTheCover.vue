@@ -1,26 +1,32 @@
 <template>
     <div id="guessTheCover" class="m-auto justify-center justify-items-center mt-14 grid">
         <img id="imgGuessTheCover" :src="url" alt="" class="border-2 border-white">
-        <div id="playableBtns" class="mt-5 flex gap-2">
-            <div class="autocomplete" style="width:300px;">
-                <input id="myInput" type="text" name="myCountry" placeholder="Country" v-model="result">
+        <div id="playableBtns" class="mt-5 grid gap-2">
+            <div class="autocomplete">
+                <input id="myInput" class="w-full" type="text" name="myCountry" placeholder="Country" v-model="result">
             </div>
 
-            <button :onClick="checkResult"
+            <div class="grid md:grid-cols-2 gap-2">
+                <button :onClick="checkResult"
                 class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
             <button :onClick="omitir"
                 class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
+            </div>
         </div>
         <div id="results" style="display:none" class="text-center">
-            <p>El juego era:</p>
+            <p id="badResult" style="display: none;">El juego era:</p>
             <h2 id="name"></h2>
-            <h3 id="year">2022</h3>
+            <h3 id="year"></h3>
         </div>
         <div id="clues" style="display:none">
             <p>Plataformas</p>
             <div id="plataforms" class="flex"></div>
             <p>Generos</p>
             <div id="genres" class="flex"></div>
+        </div>
+        <div id="newGame" style="display: none">
+            <button :onClick="newGame"
+                class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">NUeva Partida</button>
         </div>
         <div id="hearts" class="flex bg-white mt-5 rounded-sm">
             <div id="heart0">
@@ -53,16 +59,14 @@
 
 <script setup>
 
+// Importaciones
+import { checkResultWithCorrect, getIDs, getGamesTitles, getGameGenres, getGamePlataforms, getVideoGameNameAndYear } from '../database/database';
 import VueMagnifier from '@websitebeaver/vue-magnifier';
 import '@websitebeaver/vue-magnifier/styles.css';
-import { getGame, getIDs, getGamesTitles } from '../database/database';
 import { PLATAFORMS } from '../icons/plataforms'
 import { GENRES } from '../icons/genres'
 import { onMounted } from 'vue';
 
-let imgSrc = "https://placehold.co/300x400"
-let imgID = localStorage.getItem("guessTheCoverActualGameID");
-let game = undefined;
 let result = ""
 
 // Método para obtener la fase en la que se encuentra el jugador
@@ -114,6 +118,7 @@ const loadImg = (url) => {
 
 // Método para pasar de fase
 const nextPhase = () => {
+    console.log("NUEVA FASEEEEEEEE");
     let actualPhase = Number(localStorage.getItem("guessTheCoverPhase"))
     actualPhase++;
     localStorage.setItem("guessTheCoverPhase", actualPhase);
@@ -138,39 +143,63 @@ const omitir = () => {
     }
 }
 
-
-
-function resetContent() {
-    document.getElementById("name").innerHTML = '';
-    document.getElementById("genres").innerHTML = '<p>A</p>';
-    document.getElementById("plataforms").innerHTML = '';
-    document.getElementById("year").innerHTML = '';
-}
-
+// Función para cargar los iconos de los generos
 const loadGenres = (genres) => {
-    // Cargar iconos generos
-    genres.forEach(gen => {
-        document.getElementById("genres").innerHTML += `<div class='icon bg-white h-16 w-16 m-2'><img src='${GENRES[gen]["slug"]}' title='${GENRES[gen]["name"]}'></div>`
-    });;
+    getGameGenres(localStorage.getItem("guessTheCoverActualGameID")).then(gen => {
+        console.log("gen");
+        console.log(gen);
+        // Cargar iconos generos
+        gen.forEach(g => {
+            document.getElementById("genres").innerHTML += `<div class='icon bg-white h-16 w-16 m-2'><img src='${GENRES[g]["slug"]}' title='${GENRES[g]["name"]}'></div>`
+        });;
+    })
 }
 
-const loadPlataforms = (plataforms) => {
-    // Cargar iconos plataformas
-    plataforms.forEach(plat => {
-        document.getElementById("plataforms").innerHTML += `<div class='icon bg-white h-16 w-16 m-2'><img src='${PLATAFORMS[plat]["slug"]}' title='${PLATAFORMS[plat]["name"]}'></div>`
-    });;
+// Función para cargar los iconos de las plataformas
+const loadPlataforms = () => {
+    getGamePlataforms(localStorage.getItem("guessTheCoverActualGameID")).then(plat => {
+        // Cargar iconos plataformas
+        plat.forEach(p => {
+            document.getElementById("plataforms").innerHTML += `<div class='icon bg-white h-16 w-16 m-2'><img src='${PLATAFORMS[p]["slug"]}' title='${PLATAFORMS[p]["name"]}'></div>`
+        });;
+    })
 }
 
-
-const loadGame = () => {
-    getGame().then(element => {
-        game = element;
-        document.getElementById("name").innerHTML = element["name"];
-        document.getElementById("year").innerHTML = element["year"];
-        loadGenres(element["genres"]);
-        loadPlataforms(element["plataforms"]);
-    });
+// Función para mostrar las pistas
+const loadClues = () => {
+    loadPlataforms();
+    loadGenres();
+    document.getElementById("clues").style.display = "block";
 }
+
+// Función para borrar las pistas
+const deleteClues = () => {
+    document.getElementById("genres").innerHTML = "";
+    document.getElementById("plataforms").innerHTML = "";
+    document.getElementById("clues").style.display = "none";
+}
+
+// Función para ocultar el panel de corazones
+const hideHearts = () => {
+    document.getElementById("hearts").style.display = "none";
+}
+
+// Función para mostrar el panel de corazones
+const showHearts = () => {
+    document.getElementById("hearts").style.display = "flex";
+}
+
+// Función para cargar el nombre y el año del videojuego
+const loadNameAndYear = () => {
+    getVideoGameNameAndYear(localStorage.getItem("guessTheCoverActualGameID")).then(e => {
+        console.log("EE");
+        console.log(e);
+        document.getElementById("name").innerHTML = e[0];
+        document.getElementById("year").innerHTML = e[1];
+        document.getElementById("results").style.display = "block";
+    })
+}
+
 
 // Función que devuelve la fecha en formato dd-mm-yyyy
 const getDate = () => {
@@ -210,6 +239,7 @@ const loadGamesInLocalStorage = () => {
     })
 }
 
+// Función para cargar los corazones
 const loadHearts = () => {
     let h = localStorage.guessTheCoverHearts;
     let cont = 4;
@@ -220,42 +250,22 @@ const loadHearts = () => {
     }
 }
 
+// Función que elimina un corazón
 const removeHeart = () => {
     localStorage.guessTheCoverHearts = localStorage.guessTheCoverHearts - 1;
     // if (localStorage.getItem("guessTheCoverHearts") > 0)
     loadHearts();
 }
+// Función que reinicia los corazones
 const resetHearts = () => {
     localStorage.guessTheCoverHearts = 4;
 }
 
 
-// A realizar una vez cargado el contenido del DOM
-document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.guessTheCoverHearts != 0) {
-        loadHearts();
-    } else {
-        console.log("Sin corazones");
-        loadHearts();
-
-    }
-    loadImg(getImg(getPhase()));
-
-    getGamesTitles().then(e => {
-        console.log("autocomplete loading");
-        autocomplete(document.getElementById("myInput"), e);
-        console.log("autocomplete loaded");
-    })
-    // if (localStorage.guessTheCoverLoadNewGame) {
-    //     getRandomGameID();
-    //     localStorage.removeItem("guessTheCoverLoadNewGame");
-    // }
-});
 
 
 
 mounted: {
-    // loadGame();
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {
         localStorage.guessTheCoverFirstGamePlayed = true;
@@ -279,15 +289,95 @@ Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
 }
 
+// Función para cargar la victoria
+const loadWin = () => {
+    loadClues();
+    loadNameAndYear();
+    hideHearts();
+    document.getElementById("newGame").style.display = "block";
+    document.getElementById("playableBtns").style.display = "none";
+    console.log("HAS GANADO");
+    localStorage.setItem("guessTheCoverWin", true);
+    document.getElementById("myInput").value = "";
+}
 
+// Función para cargar una nueva partida
+const newGame = () => {
+    deleteClues();
+    localStorage.setItem("guessTheCoverPhase", 0);
+    resetHearts();
+    loadGamesInLocalStorage();
+    getGamesTitles().then(e => {
+        console.log("autocomplete loading");
+        autocomplete(document.getElementById("myInput"), e);
+        console.log("autocomplete loaded");
+    })
+    document.getElementById("playableBtns").style.display = "grid";
+    localStorage.removeItem("guessTheCoverWin");
+    document.getElementById("myInput").value = "";
+    document.getElementById("name").innerHTML = "";
+    document.getElementById("year").innerHTML = "";
+    document.getElementById("results").style.display = "none";
+    document.getElementById("newGame").style.display = "none";
+    showHearts();
+}
+
+// Función para cargar como fase la imagen sin pixelar
+const setLastPhase = () => {
+    localStorage.setItem("guessTheCoverPhase", 10);
+}
+
+// Función que comprueba el resultado
 const checkResult = () => {
-    console.log(result);
+    if (result !== "") {
+        console.log(result);
+        let idGame = localStorage.getItem("guessTheCoverActualGameID");
+        checkResultWithCorrect(idGame, result).then(e => {
+            console.log(e);
+            if (e) {
+                // Has adivinado el juego
+                localStorage.setItem("guessTheCoverPhase", 10);
+                setLastPhase();
+                loadImg(getImg());
+                loadWin();
+
+            } else {
+                // No lo has adivinado
+                removeHeart();
+                nextPhase();
+                loadImg(getImg())
+                result = "";
+                document.getElementById("myInput").value = "";
+            }
+        })
+    }
+
 }
 
 
+// A realizar una vez cargado el contenido del DOM
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.guessTheCoverHearts != 0) {
+        loadHearts();
+    } else {
+        console.log("Sin corazones");
+        loadHearts();
+
+    }
+    loadImg(getImg());
+
+    getGamesTitles().then(e => {
+        console.log("autocomplete loading");
+        autocomplete(document.getElementById("myInput"), e);
+        console.log("autocomplete loaded");
+    })
+    if (localStorage.getItem("guessTheCoverWin")) {
+        loadWin();
+    }
+});
 
 
-// Autocomplete
+// Funciones para el autocompletado
 
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
@@ -316,10 +406,12 @@ function autocomplete(inp, arr) {
                 b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
                 b.innerHTML += arr[i].substr(val.length);
                 /*insert a input field that will hold the current array item's value:*/
-                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                b.innerHTML += `<input type='hidden' value="${arr[i]}">`;
                 /*execute a function when someone clicks on the item value (DIV element):*/
                 b.addEventListener("click", function (e) {
                     /*insert the value for the autocomplete text field:*/
+                    console.log("INPUT: ");
+                    console.log(this.getElementsByTagName("input")[0]);
                     inp.value = this.getElementsByTagName("input")[0].value;
                     result = this.getElementsByTagName("input")[0].value;
                     /*close the list of autocompleted values,

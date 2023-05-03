@@ -79,7 +79,18 @@ input[type=text] {
   height: 400px !important;
 }
 
+.autocomplete,
+#imgGuessTheCover, #playableBtns {
+  width: 100% !important;
+}
+
 @media screen and (min-width: 1280px) {
+
+  .autocomplete,
+  #imgGuessTheCover {
+    width: 400px !important;
+  }
+
   #imgGuessTheCover {
     width: 400px !important;
     height: 500px !important;
