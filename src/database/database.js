@@ -54,3 +54,17 @@ export async function getGame() {
     }
 }
 
+export async function getGamesTitles() {
+    try {
+        const q = query(collection(db, "guessTheCover"));
+        const querySnapshot = await getDocs(q);
+        let gamesTitles = [];
+        querySnapshot.forEach((doc) => {
+            gamesTitles.push(doc.data().name)
+        })
+        return gamesTitles;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}

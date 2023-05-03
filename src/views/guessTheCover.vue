@@ -2,8 +2,11 @@
     <div id="guessTheCover" class="m-auto justify-center justify-items-center mt-14 grid">
         <img id="imgGuessTheCover" :src="url" alt="" class="border-2 border-white">
         <div id="playableBtns" class="mt-5 flex gap-2">
-            <input v-model="search" @input="onChange" type="text" class="text-black px-3" />
-            <button
+            <div class="autocomplete" style="width:300px;">
+                <input id="myInput" type="text" name="myCountry" placeholder="Country" v-model="result">
+            </div>
+
+            <button :onClick="checkResult"
                 class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
             <button :onClick="omitir"
                 class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
@@ -52,7 +55,7 @@
 
 import VueMagnifier from '@websitebeaver/vue-magnifier';
 import '@websitebeaver/vue-magnifier/styles.css';
-import { getGame, getIDs } from '../database/database';
+import { getGame, getIDs, getGamesTitles } from '../database/database';
 import { PLATAFORMS } from '../icons/plataforms'
 import { GENRES } from '../icons/genres'
 import { onMounted } from 'vue';
@@ -60,11 +63,12 @@ import { onMounted } from 'vue';
 let imgSrc = "https://placehold.co/300x400"
 let imgID = localStorage.getItem("guessTheCoverActualGameID");
 let game = undefined;
+let result = ""
 
 // Método para obtener la fase en la que se encuentra el jugador
 const getPhase = () => {
     let phase = localStorage.getItem("guessTheCoverPhase");
-    console.log("Phase: "+phase);
+    console.log("Phase: " + phase);
     switch (phase) {
         case "0":
             console.log("p0");
@@ -236,6 +240,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
     loadImg(getImg(getPhase()));
+
+    getGamesTitles().then(e => {
+        console.log("autocomplete loading");
+        autocomplete(document.getElementById("myInput"), e);
+        console.log("autocomplete loaded");
+    })
     // if (localStorage.guessTheCoverLoadNewGame) {
     //     getRandomGameID();
     //     localStorage.removeItem("guessTheCoverLoadNewGame");
@@ -262,17 +272,119 @@ mounted: {
         } else {
 
         }
-        // if (localStorage.guessThtCoverID) {
-        //     console.log("Existe el id: " + localStorage.guessThtCoverID);
-        // } else {
-        //     console.log("No existe el id");
-        //     localStorage.guessThtCoverID = "co55md";
-        // }
     }
 
 }
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
+}
+
+
+const checkResult = () => {
+    console.log(result);
+}
+
+
+
+
+// Autocomplete
+
+function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function (e) {
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false; }
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+        for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                /*create a DIV element for each matching element:*/
+                b = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                b.innerHTML += arr[i].substr(val.length);
+                /*insert a input field that will hold the current array item's value:*/
+                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                /*execute a function when someone clicks on the item value (DIV element):*/
+                b.addEventListener("click", function (e) {
+                    /*insert the value for the autocomplete text field:*/
+                    inp.value = this.getElementsByTagName("input")[0].value;
+                    result = this.getElementsByTagName("input")[0].value;
+                    /*close the list of autocompleted values,
+                    (or any other open lists of autocompleted values:*/
+                    closeAllLists();
+                });
+                a.appendChild(b);
+            }
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+                /*and simulate a click on the "active" item:*/
+                if (x) x[currentFocus].click();
+            }
+        }
+    });
+    function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+        }
+    }
+    function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
 }
 
 </script>
