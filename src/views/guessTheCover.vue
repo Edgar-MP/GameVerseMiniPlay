@@ -1,16 +1,16 @@
 <template>
     <div id="guessTheCover" class="m-auto justify-center justify-items-center mt-14 grid">
         <img id="imgGuessTheCover" :src="url" alt="" class="border-2 border-white">
-        <div id="playableBtns" class="mt-5 grid gap-2">
+        <div id="playableBtns" class="mt-5 grid gap-2 justify-center">
             <div class="autocomplete">
-                <input id="myInput" class="w-full" type="text" name="myCountry" placeholder="Country" v-model="result">
+                <input id="myInput" class="w-full" type="text" name="myVideogame" placeholder="Videojuego" v-model="result">
             </div>
 
             <div class="grid md:grid-cols-2 gap-2">
                 <button :onClick="checkResult"
-                class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
-            <button :onClick="omitir"
-                class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
+                    class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
+                <button :onClick="omitir"
+                    class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
             </div>
         </div>
         <div id="results" style="display:none" class="text-center">
@@ -26,7 +26,8 @@
         </div>
         <div id="newGame" style="display: none">
             <button :onClick="newGame"
-                class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">NUeva Partida</button>
+                class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">NUeva
+                Partida</button>
         </div>
         <div id="hearts" class="flex bg-white mt-5 rounded-sm">
             <div id="heart0">
@@ -54,6 +55,10 @@
                     src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
         </div>
+        <div class="">
+            <h2>Racha actual: <span id="currentWins">0</span></h2>
+            <h2>Racha máxima: <span id="allwaysMaxWins"></span></h2>
+        </div>
     </div>
 </template>
 
@@ -68,6 +73,7 @@ import { GENRES } from '../icons/genres'
 import { onMounted } from 'vue';
 
 let result = ""
+let actualWins = 0;
 
 // Método para obtener la fase en la que se encuentra el jugador
 const getPhase = () => {
@@ -237,7 +243,7 @@ const loadGamesInLocalStorage = () => {
 // Función para cargar los corazones
 const loadHearts = () => {
     let h = localStorage.guessTheCoverHearts;
-    console.log("Hearts: "+h);
+    console.log("Hearts: " + h);
     let cont = 4;
     while (h < cont) {
         document.getElementById("heart" + h + "Good").style.display = "none";
@@ -253,7 +259,6 @@ const removeHeart = () => {
         // console.log("OLEEEEEEEEEEEE 0 VIDAS");
         setLastPhase();
         loadImg(getImg());
-        // loadWin();
         loadLost();
     }
     loadHearts();
@@ -261,11 +266,10 @@ const removeHeart = () => {
 // Función que reinicia los corazones
 const resetHearts = () => {
     localStorage.guessTheCoverHearts = 4;
-    for (let h=0; h<=3; h++) {
+    for (let h = 0; h <= 3; h++) {
         document.getElementById("heart" + h + "Good").style.display = "block";
         document.getElementById("heart" + h + "Bad").style.display = "none";
     }
-
 }
 
 
@@ -275,10 +279,12 @@ const resetHearts = () => {
 mounted: {
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {
+        localStorage.allwaysMaxWins = "-";
         localStorage.guessTheCoverFirstGamePlayed = true;
         localStorage.guessTheCoverLoadNewGame = true;
         localStorage.setItem("guessTheCoverPhase", 0);
-        resetHearts();
+        localStorage.guessTheCoverHearts = 4;
+
         loadGamesInLocalStorage();
         // console.log("Primera vez que entro :D");
     } else {
@@ -296,8 +302,28 @@ Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
 }
 
+
+const reloadWins = () => {
+    if (localStorage.getItem("allwaysMaxWins") == "-") {
+        localStorage.setItem("allwaysMaxWins", localStorage.getItem("currentWins"));
+    }
+    if (localStorage.getItem("allwaysMaxWins") < localStorage.getItem("currentWins")) {
+        localStorage.setItem("allwaysMaxWins", localStorage.getItem("currentWins"));
+    }
+}
+
+const reloadFrontViews = () => {
+    document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
+    document.getElementById("currentWins").innerHTML = localStorage.getItem("currentWins");
+}
+
 // Función para cargar la victoria
 const loadWin = () => {
+    let w = localStorage.getItem("currentWins");
+    w++;
+    localStorage.setItem("currentWins", w);
+    reloadWins();
+    reloadFrontViews();
     loadClues();
     loadNameAndYear();
     hideHearts();
@@ -310,6 +336,11 @@ const loadWin = () => {
 
 // Función para cargar la derrota
 const loadLost = () => {
+    localStorage.setItem("currentWins", 0);
+    localStorage.removeItem("usedGames", []);
+    reloadWins();
+    reloadFrontViews();
+    localStorage.setItem("currentWins", 0);
     loadClues();
     loadNameAndYear();
     hideHearts();
@@ -324,7 +355,7 @@ const loadLost = () => {
 
 // Función para cargar una nueva partida
 const newGame = () => {
-        deleteClues();
+    deleteClues();
     localStorage.setItem("guessTheCoverPhase", 0);
     resetHearts();
     loadGamesInLocalStorage();
@@ -389,7 +420,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadImg(getImg());
         loadLost();
     }
-    loadImg(getImg());
+    // loadImg(getImg());
 
     getGamesTitles().then(e => {
         // console.log("autocomplete loading");
@@ -399,6 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("guessTheCoverWin")) {
         loadWin();
     }
+    document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
 });
 
 
