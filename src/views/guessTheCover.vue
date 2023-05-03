@@ -19,10 +19,10 @@
             <h3 id="year"></h3>
         </div>
         <div id="clues" style="display:none">
-            <p>Plataformas</p>
-            <div id="plataforms" class="flex"></div>
-            <p>Generos</p>
-            <div id="genres" class="flex"></div>
+            <p class="text-center">Plataformas</p>
+            <div id="plataforms" class="flex justify-center"></div>
+            <p class="text-center">Generos</p>
+            <div id="genres" class="flex justify-center"></div>
         </div>
         <div id="newGame" style="display: none">
             <button :onClick="newGame"
@@ -72,26 +72,21 @@ let result = ""
 // Método para obtener la fase en la que se encuentra el jugador
 const getPhase = () => {
     let phase = localStorage.getItem("guessTheCoverPhase");
-    console.log("Phase: " + phase);
+    // console.log("Phase: " + phase);
     switch (phase) {
         case "0":
-            console.log("p0");
             return "_p0";
             break;
         case "1":
-            console.log("p1");
             return "_p1";
             break;
         case "2":
-            console.log("p2");
             return "_p2";
             break;
         case "3":
-            console.log("p3");
             return "_p3";
             break;
         default:
-            console.log("default");
             return ""
             break;
     }
@@ -99,10 +94,10 @@ const getPhase = () => {
 
 // Método para obtener una imagen
 const getImg = () => {
-    console.log("object");
+    // console.log("object");
     let idGame = localStorage.getItem("guessTheCoverActualGameID");
-    console.log("idGame: " + idGame);
-    console.log("phase: " + getPhase());
+    // console.log("idGame: " + idGame);
+    // console.log("phase: " + getPhase());
     return "https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/guessTheCover%2F" + idGame + getPhase() + ".jpg?alt=media"
 }
 
@@ -112,13 +107,13 @@ let url = getImg();
 
 // Método para cargar una imagen 
 const loadImg = (url) => {
-    console.log("url: " + url);
+    // console.log("url: " + url);
     document.getElementById("imgGuessTheCover").src = url;
 }
 
 // Método para pasar de fase
 const nextPhase = () => {
-    console.log("NUEVA FASEEEEEEEE");
+    // console.log("NUEVA FASEEEEEEEE");
     let actualPhase = Number(localStorage.getItem("guessTheCoverPhase"))
     actualPhase++;
     localStorage.setItem("guessTheCoverPhase", actualPhase);
@@ -128,7 +123,7 @@ const nextPhase = () => {
 // Método para omitir un intento
 const omitir = () => {
     if (localStorage.getItem("guessTheCoverHearts") === "1") {
-        console.log("Omiciooon");
+        // console.log("Omiciooon");
         nextPhase()
         loadImg(getImg());
         removeHeart();
@@ -146,8 +141,8 @@ const omitir = () => {
 // Función para cargar los iconos de los generos
 const loadGenres = (genres) => {
     getGameGenres(localStorage.getItem("guessTheCoverActualGameID")).then(gen => {
-        console.log("gen");
-        console.log(gen);
+        // console.log("gen");
+        // console.log(gen);
         // Cargar iconos generos
         gen.forEach(g => {
             document.getElementById("genres").innerHTML += `<div class='icon bg-white h-16 w-16 m-2'><img src='${GENRES[g]["slug"]}' title='${GENRES[g]["name"]}'></div>`
@@ -192,8 +187,8 @@ const showHearts = () => {
 // Función para cargar el nombre y el año del videojuego
 const loadNameAndYear = () => {
     getVideoGameNameAndYear(localStorage.getItem("guessTheCoverActualGameID")).then(e => {
-        console.log("EE");
-        console.log(e);
+        // console.log("EE");
+        // console.log(e);
         document.getElementById("name").innerHTML = e[0];
         document.getElementById("year").innerHTML = e[1];
         document.getElementById("results").style.display = "block";
@@ -216,7 +211,7 @@ const getRandomGameID = () => {
     if (!localStorage.usedGames) {
         e = localStorage.getItem("guessTheCoverIDs").split(",").random();
         arr.push(e);
-        console.log("arr: " + arr);
+        // console.log("arr: " + arr);
     } else {
         arr = JSON.parse(localStorage.usedGames);
         e = localStorage.guessTheCoverActualGameID;
@@ -242,6 +237,7 @@ const loadGamesInLocalStorage = () => {
 // Función para cargar los corazones
 const loadHearts = () => {
     let h = localStorage.guessTheCoverHearts;
+    console.log("Hearts: "+h);
     let cont = 4;
     while (h < cont) {
         document.getElementById("heart" + h + "Good").style.display = "none";
@@ -253,12 +249,23 @@ const loadHearts = () => {
 // Función que elimina un corazón
 const removeHeart = () => {
     localStorage.guessTheCoverHearts = localStorage.guessTheCoverHearts - 1;
-    // if (localStorage.getItem("guessTheCoverHearts") > 0)
+    if (localStorage.getItem("guessTheCoverHearts") == 0) {
+        // console.log("OLEEEEEEEEEEEE 0 VIDAS");
+        setLastPhase();
+        loadImg(getImg());
+        // loadWin();
+        loadLost();
+    }
     loadHearts();
 }
 // Función que reinicia los corazones
 const resetHearts = () => {
     localStorage.guessTheCoverHearts = 4;
+    for (let h=0; h<=3; h++) {
+        document.getElementById("heart" + h + "Good").style.display = "block";
+        document.getElementById("heart" + h + "Bad").style.display = "none";
+    }
+
 }
 
 
@@ -273,12 +280,12 @@ mounted: {
         localStorage.setItem("guessTheCoverPhase", 0);
         resetHearts();
         loadGamesInLocalStorage();
-        console.log("Primera vez que entro :D");
+        // console.log("Primera vez que entro :D");
     } else {
         // Comprobar si la última vez que se entro fue ese mismo día y si estan guardados los IDs de los juegos
         if (localStorage.guessTheCoverIDsDate != getDate() && !localStorage.guessTheCoverIDs) {
             loadGamesInLocalStorage();
-            console.log("No existe el IDs o no has entrado hoy");
+            // console.log("No existe el IDs o no has entrado hoy");
         } else {
 
         }
@@ -296,30 +303,47 @@ const loadWin = () => {
     hideHearts();
     document.getElementById("newGame").style.display = "block";
     document.getElementById("playableBtns").style.display = "none";
-    console.log("HAS GANADO");
+    // console.log("HAS GANADO");
     localStorage.setItem("guessTheCoverWin", true);
     document.getElementById("myInput").value = "";
 }
 
+// Función para cargar la derrota
+const loadLost = () => {
+    loadClues();
+    loadNameAndYear();
+    hideHearts();
+    document.getElementById("newGame").style.display = "block";
+    document.getElementById("badResult").style.display = "block";
+    document.getElementById("playableBtns").style.display = "none";
+    // console.log("HAS Perdido :(");
+    localStorage.setItem("guessTheCoverLost", true);
+    document.getElementById("myInput").value = "";
+}
+
+
 // Función para cargar una nueva partida
 const newGame = () => {
-    deleteClues();
+        deleteClues();
     localStorage.setItem("guessTheCoverPhase", 0);
     resetHearts();
     loadGamesInLocalStorage();
     getGamesTitles().then(e => {
-        console.log("autocomplete loading");
+        // console.log("autocomplete loading");
         autocomplete(document.getElementById("myInput"), e);
-        console.log("autocomplete loaded");
+        // console.log("autocomplete loaded");
     })
+    document.getElementById("badResult").style.display = "none";
     document.getElementById("playableBtns").style.display = "grid";
     localStorage.removeItem("guessTheCoverWin");
+    localStorage.removeItem("guessTheCoverLost");
     document.getElementById("myInput").value = "";
     document.getElementById("name").innerHTML = "";
     document.getElementById("year").innerHTML = "";
     document.getElementById("results").style.display = "none";
     document.getElementById("newGame").style.display = "none";
     showHearts();
+    loadHearts();
 }
 
 // Función para cargar como fase la imagen sin pixelar
@@ -330,17 +354,16 @@ const setLastPhase = () => {
 // Función que comprueba el resultado
 const checkResult = () => {
     if (result !== "") {
-        console.log(result);
+        // console.log(result);
         let idGame = localStorage.getItem("guessTheCoverActualGameID");
         checkResultWithCorrect(idGame, result).then(e => {
-            console.log(e);
+            // console.log(e);
             if (e) {
                 // Has adivinado el juego
                 localStorage.setItem("guessTheCoverPhase", 10);
                 setLastPhase();
                 loadImg(getImg());
                 loadWin();
-
             } else {
                 // No lo has adivinado
                 removeHeart();
@@ -357,19 +380,21 @@ const checkResult = () => {
 
 // A realizar una vez cargado el contenido del DOM
 document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.guessTheCoverHearts != 0) {
+    if (localStorage.getItem("guessTheCoverHearts") != 0) {
         loadHearts();
     } else {
-        console.log("Sin corazones");
-        loadHearts();
-
+        // console.log("Sin corazones");
+        // console.log("OLEEEEEEEEEEEE 0 VIDAS");
+        setLastPhase();
+        loadImg(getImg());
+        loadLost();
     }
     loadImg(getImg());
 
     getGamesTitles().then(e => {
-        console.log("autocomplete loading");
+        // console.log("autocomplete loading");
         autocomplete(document.getElementById("myInput"), e);
-        console.log("autocomplete loaded");
+        // console.log("autocomplete loaded");
     })
     if (localStorage.getItem("guessTheCoverWin")) {
         loadWin();
@@ -410,8 +435,6 @@ function autocomplete(inp, arr) {
                 /*execute a function when someone clicks on the item value (DIV element):*/
                 b.addEventListener("click", function (e) {
                     /*insert the value for the autocomplete text field:*/
-                    console.log("INPUT: ");
-                    console.log(this.getElementsByTagName("input")[0]);
                     inp.value = this.getElementsByTagName("input")[0].value;
                     result = this.getElementsByTagName("input")[0].value;
                     /*close the list of autocompleted values,
