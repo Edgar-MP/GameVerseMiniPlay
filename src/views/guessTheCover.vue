@@ -277,6 +277,11 @@ const resetHearts = () => {
 
 
 mounted: {
+    getGamesTitles().then(e => {
+        // console.log("autocomplete loading");
+        autocomplete(document.getElementById("myInput"), e);
+        // console.log("autocomplete loaded");
+    })
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {
         localStorage.allwaysMaxWins = "-";
@@ -284,11 +289,6 @@ mounted: {
         localStorage.guessTheCoverLoadNewGame = true;
         localStorage.setItem("guessTheCoverPhase", 0);
         localStorage.guessTheCoverHearts = 4;
-        getGamesTitles().then(e => {
-            // console.log("autocomplete loading");
-            autocomplete(document.getElementById("myInput"), e);
-            // console.log("autocomplete loaded");
-        })
         loadGamesInLocalStorage();
         // console.log("Primera vez que entro :D");
     } else {
@@ -300,7 +300,6 @@ mounted: {
 
         }
     }
-
 }
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
