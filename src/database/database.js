@@ -3,31 +3,7 @@ import { defineStore } from "pinia";
 import { db } from '../firebaseConfig'
 const coll = collection(db, "guessTheCover");
 
-export const useDatabaseStore = defineStore('database', {
-    state: () => ({
-        documents: [],
-        genres: []
-    }),
-    actions: {
-        async getUrls() {
-            try {
-                const q = query(collection(db, "guessTheCover"));
-                const querySnapshot = await getDocs(q);
-                let ids = [];
-                querySnapshot.forEach((doc) => {
-                    ids.push(doc.id)
-                    this.documents.push({
-                        id: doc.id,
-                        ...doc.data()
-                    })
-                })
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        
-    }
-})
+// Función para obtener los ids de los juegos de la Base de Datos
 export async function getIDs() {
     try {
         const q = query(collection(db, "guessTheCover"));
@@ -43,20 +19,7 @@ export async function getIDs() {
     }
 }
 
-/*
-!Ejemplo de consulta
-export async function getGame() {
-    try {
-        const docRef = doc(db, "guessTheCover", "co55md");
-        const docSnap = await getDoc(docRef);
-        return docSnap.data();
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-}
-
-*/
+// Función para obtener los titulos de los juegos de la Base de Datos
 export async function getGamesTitles() {
     try {
         const q = query(collection(db, "guessTheCover"));
@@ -74,11 +37,9 @@ export async function getGamesTitles() {
 
 // Función que comprueba si la respuesta es correcta
 export async function checkResultWithCorrect(idGame, result) {
-    console.log("result: "+result);
     try {
         const docRef = doc(db, "guessTheCover", idGame);
         const docSnap = await getDoc(docRef);
-        console.log("result: "+docSnap.data().name);
         if (docSnap.data().name === result)
             return true
         return false

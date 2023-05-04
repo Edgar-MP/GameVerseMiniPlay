@@ -5,12 +5,5 @@
             class="text-purple-700">MiniPlay</span></h1></router-link>
     </nav>
   </header>
-  <!-- <div>
-    <nav>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/register">Registro</router-link>
-      <button>Logout</button>
-    </nav>
-  </div> -->
   <router-view></router-view>
 </template>

@@ -90,7 +90,6 @@ let actualWins = 0;
 // Método para obtener la fase en la que se encuentra el jugador
 const getPhase = () => {
     let phase = localStorage.getItem("guessTheCoverPhase");
-    // console.log("Phase: " + phase);
     switch (phase) {
         case "0":
             return "_p0";
@@ -112,26 +111,21 @@ const getPhase = () => {
 
 // Método para obtener una imagen
 const getImg = () => {
-    // console.log("object");
     let idGame = localStorage.getItem("guessTheCoverActualGameID");
-    // console.log("idGame: " + idGame);
-    // console.log("phase: " + getPhase());
     return "https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/guessTheCover%2F" + idGame + getPhase() + ".jpg?alt=media"
 }
 
-
+// Variable de la url de la imagen
 let url = getImg();
 
 
 // Método para cargar una imagen 
 const loadImg = (url) => {
-    // console.log("url: " + url);
     document.getElementById("imgGuessTheCover").src = url;
 }
 
 // Método para pasar de fase
 const nextPhase = () => {
-    // console.log("NUEVA FASEEEEEEEE");
     let actualPhase = Number(localStorage.getItem("guessTheCoverPhase"))
     actualPhase++;
     localStorage.setItem("guessTheCoverPhase", actualPhase);
@@ -141,7 +135,6 @@ const nextPhase = () => {
 // Método para omitir un intento
 const omitir = () => {
     if (localStorage.getItem("guessTheCoverHearts") === "1") {
-        // console.log("Omiciooon");
         nextPhase()
         loadImg(getImg());
         removeHeart();
@@ -159,8 +152,6 @@ const omitir = () => {
 // Función para cargar los iconos de los generos
 const loadGenres = (genres) => {
     getGameGenres(localStorage.getItem("guessTheCoverActualGameID")).then(gen => {
-        // console.log("gen");
-        // console.log(gen);
         // Cargar iconos generos
         gen.forEach(g => {
             document.getElementById("genres").innerHTML += `<div class='icon bg-white h-16 w-16 m-2'><img src='${GENRES[g]["slug"]}' title='${GENRES[g]["name"]}'></div>`
@@ -205,8 +196,6 @@ const showHearts = () => {
 // Función para cargar el nombre y el año del videojuego
 const loadNameAndYear = () => {
     getVideoGameNameAndYear(localStorage.getItem("guessTheCoverActualGameID")).then(e => {
-        // console.log("EE");
-        // console.log(e);
         document.getElementById("name").innerHTML = e[0];
         document.getElementById("year").innerHTML = e[1];
         document.getElementById("results").style.display = "block";
@@ -223,13 +212,13 @@ const getDate = () => {
     return `${day}-${month}-${year}`;
 }
 
+// Función que guarda el id de un videojuego que no haya salido durante la partida
 const getRandomGameID = () => {
     let arr = [];
     let e = "";
     if (!localStorage.usedGames) {
         e = localStorage.getItem("guessTheCoverIDs").split(",").random();
         arr.push(e);
-        // console.log("arr: " + arr);
     } else {
         arr = JSON.parse(localStorage.usedGames);
         e = localStorage.guessTheCoverActualGameID;
@@ -255,7 +244,6 @@ const loadGamesInLocalStorage = () => {
 // Función para cargar los corazones
 const loadHearts = () => {
     let h = localStorage.guessTheCoverHearts;
-    console.log("Hearts: " + h);
     let cont = 4;
     while (h < cont) {
         document.getElementById("heart" + h + "Good").style.display = "none";
@@ -268,7 +256,6 @@ const loadHearts = () => {
 const removeHeart = () => {
     localStorage.guessTheCoverHearts = localStorage.guessTheCoverHearts - 1;
     if (localStorage.getItem("guessTheCoverHearts") == 0) {
-        // console.log("OLEEEEEEEEEEEE 0 VIDAS");
         setLastPhase();
         loadImg(getImg());
         loadLost();
@@ -284,15 +271,11 @@ const resetHearts = () => {
     }
 }
 
-
-
-
-
+// Operaciones varias ha realizar antes de cargar el DOM
 mounted: {
+    // Obtener titulos de los videojuegos para cargar el autocomplete
     getGamesTitles().then(e => {
-        // console.log("autocomplete loading");
         autocomplete(document.getElementById("myInput"), e);
-        // console.log("autocomplete loaded");
     })
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {
@@ -302,22 +285,21 @@ mounted: {
         localStorage.setItem("guessTheCoverPhase", 0);
         localStorage.guessTheCoverHearts = 4;
         loadGamesInLocalStorage();
-        // console.log("Primera vez que entro :D");
     } else {
         // Comprobar si la última vez que se entro fue ese mismo día y si estan guardados los IDs de los juegos
         if (localStorage.guessTheCoverIDsDate != getDate() && !localStorage.guessTheCoverIDs) {
             loadGamesInLocalStorage();
-            // console.log("No existe el IDs o no has entrado hoy");
         } else {
 
         }
     }
 }
+// Crear function .random para devolver un elemento random de un array
 Array.prototype.random = function () {
     return this[Math.floor((Math.random() * this.length))];
 }
 
-
+// Función para recargar las rachas en el localStorage
 const reloadWins = () => {
     if (localStorage.getItem("allwaysMaxWins") == "-") {
         localStorage.setItem("allwaysMaxWins", localStorage.getItem("currentWins"));
@@ -327,6 +309,7 @@ const reloadWins = () => {
     }
 }
 
+// Función para recargar el panel de rachas
 const reloadFrontViews = () => {
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
     document.getElementById("currentWins").innerHTML = localStorage.getItem("currentWins");
@@ -344,7 +327,6 @@ const loadWin = () => {
     hideHearts();
     document.getElementById("newGame").style.display = "block";
     document.getElementById("playableBtns").style.display = "none";
-    // console.log("HAS GANADO");
     localStorage.setItem("guessTheCoverWin", true);
     document.getElementById("myInput").value = "";
 }
@@ -362,7 +344,6 @@ const loadLost = () => {
     document.getElementById("newGame").style.display = "block";
     document.getElementById("badResult").style.display = "block";
     document.getElementById("playableBtns").style.display = "none";
-    // console.log("HAS Perdido :(");
     localStorage.setItem("guessTheCoverLost", true);
     document.getElementById("myInput").value = "";
 }
@@ -375,9 +356,7 @@ const newGame = () => {
     resetHearts();
     loadGamesInLocalStorage();
     getGamesTitles().then(e => {
-        // console.log("autocomplete loading");
         autocomplete(document.getElementById("myInput"), e);
-        // console.log("autocomplete loaded");
     })
     document.getElementById("badResult").style.display = "none";
     document.getElementById("playableBtns").style.display = "grid";
@@ -400,10 +379,8 @@ const setLastPhase = () => {
 // Función que comprueba el resultado
 const checkResult = () => {
     if (result !== "") {
-        // console.log(result);
         let idGame = localStorage.getItem("guessTheCoverActualGameID");
         checkResultWithCorrect(idGame, result).then(e => {
-            // console.log(e);
             if (e) {
                 // Has adivinado el juego
                 localStorage.setItem("guessTheCoverPhase", 10);
@@ -429,18 +406,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem("guessTheCoverHearts") != 0) {
         loadHearts();
     } else {
-        // console.log("Sin corazones");
-        // console.log("OLEEEEEEEEEEEE 0 VIDAS");
         setLastPhase();
         loadImg(getImg());
         loadLost();
     }
-    // loadImg(getImg());
 
     getGamesTitles().then(e => {
-        // console.log("autocomplete loading");
         autocomplete(document.getElementById("myInput"), e);
-        // console.log("autocomplete loaded");
     })
     if (localStorage.getItem("guessTheCoverWin")) {
         loadWin();
@@ -448,93 +420,63 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
 });
 
-// Funciones para el autocompletado
 
+// Funciones para el autocompletado de opciones
 function autocomplete(inp, arr) {
-    /*the autocomplete function takes two arguments,
-    the text field element and an array of possible autocompleted values:*/
     var currentFocus;
-    /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function (e) {
         var a, b, i, val = this.value;
-        /*close any already open lists of autocompleted values*/
         closeAllLists();
         if (!val) { return false; }
         currentFocus = -1;
-        /*create a DIV element that will contain the items (values):*/
         a = document.createElement("DIV");
         a.setAttribute("id", this.id + "autocomplete-list");
         a.setAttribute("class", "autocomplete-items");
-        /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
-        /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
-                /*make the matching letters bold:*/
                 b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
                 b.innerHTML += arr[i].substr(val.length);
-                /*insert a input field that will hold the current array item's value:*/
                 b.innerHTML += `<input type='hidden' value="${arr[i]}">`;
-                /*execute a function when someone clicks on the item value (DIV element):*/
                 b.addEventListener("click", function (e) {
-                    /*insert the value for the autocomplete text field:*/
                     inp.value = this.getElementsByTagName("input")[0].value;
                     result = this.getElementsByTagName("input")[0].value;
-                    /*close the list of autocompleted values,
-                    (or any other open lists of autocompleted values:*/
                     closeAllLists();
                 });
                 a.appendChild(b);
             }
         }
     });
-    /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function (e) {
         var x = document.getElementById(this.id + "autocomplete-list");
         if (x) x = x.getElementsByTagName("div");
         if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-            increase the currentFocus variable:*/
             currentFocus++;
-            /*and and make the current item more visible:*/
             addActive(x);
         } else if (e.keyCode == 38) { //up
-            /*If the arrow UP key is pressed,
-            decrease the currentFocus variable:*/
             currentFocus--;
-            /*and and make the current item more visible:*/
             addActive(x);
         } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
             e.preventDefault();
             if (currentFocus > -1) {
-                /*and simulate a click on the "active" item:*/
                 if (x) x[currentFocus].click();
             }
         }
     });
     function addActive(x) {
-        /*a function to classify an item as "active":*/
         if (!x) return false;
-        /*start by removing the "active" class on all items:*/
         removeActive(x);
         if (currentFocus >= x.length) currentFocus = 0;
         if (currentFocus < 0) currentFocus = (x.length - 1);
-        /*add class "autocomplete-active":*/
         x[currentFocus].classList.add("autocomplete-active");
     }
     function removeActive(x) {
-        /*a function to remove the "active" class from all autocomplete items:*/
         for (var i = 0; i < x.length; i++) {
             x[i].classList.remove("autocomplete-active");
         }
     }
     function closeAllLists(elmnt) {
-        /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
         var x = document.getElementsByClassName("autocomplete-items");
         for (var i = 0; i < x.length; i++) {
             if (elmnt != x[i] && elmnt != inp) {
@@ -542,7 +484,6 @@ function autocomplete(inp, arr) {
             }
         }
     }
-    /*execute a function when someone clicks in the document:*/
     document.addEventListener("click", function (e) {
         closeAllLists(e.target);
     });
