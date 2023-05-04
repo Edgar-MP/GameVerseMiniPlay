@@ -1,11 +1,13 @@
 <template>
+    <!-- Contenedo principal -->
     <div id="guessTheCover" class="m-auto justify-center justify-items-center mt-14 grid">
+        <!-- Imagen del videojuego -->
         <img id="imgGuessTheCover" :src="url" alt="" class="border-2 border-white">
+        <!-- Contenedor con los botones del juego -->
         <div id="playableBtns" class="mt-5 grid gap-2 justify-center">
             <div class="autocomplete">
                 <input id="myInput" class="w-full" type="text" name="myVideogame" placeholder="Videojuego" v-model="result">
             </div>
-
             <div class="grid md:grid-cols-2 gap-2">
                 <button :onClick="checkResult"
                     class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
@@ -13,41 +15,49 @@
                     class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
             </div>
         </div>
+        <!-- Contenedor con los resultados -->
         <div id="results" style="display:none" class="text-center">
             <p id="badResult" style="display: none;">El juego era:</p>
             <h2 id="name"></h2>
             <h3 id="year"></h3>
         </div>
+        <!-- Contenedor con las pistas -->
         <div id="clues" style="display:none">
             <p class="text-center">Plataformas</p>
             <div id="plataforms" class="flex justify-center"></div>
             <p class="text-center">Generos</p>
             <div id="genres" class="flex justify-center"></div>
         </div>
+        <!-- Botón de nueva partida -->
         <div id="newGame" style="display: none">
             <button :onClick="newGame"
                 class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">NUeva
                 Partida</button>
         </div>
-        <div id="hearts" class="flex bg-white mt-5 rounded-sm">
+        <!-- Contenedor de corazónes -->
+        <div id="hearts" class="flex mt-5 rounded-sm">
+            <!-- Corazón 0 -->
             <div id="heart0">
                 <img id="heart0Good" width="50"
-                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
+                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
                 <img id="heart0Bad" style="display: none;" width="50"
-                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
+                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
+            <!-- Corazón 1 -->
             <div id="heart1">
                 <img id="heart1Good" width="50"
-                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
+                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
                 <img id="heart1Bad" style="display: none;" width="50"
-                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
+                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
+            <!-- Corazón 2 -->
             <div id="heart2">
                 <img id="heart2Good" width="50"
-                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
+                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
                 <img id="heart2Bad" style="display: none;" width="50"
-                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
+                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
+            <!-- Corazón 3 -->
             <div id="heart3">
                 <img id="heart3Good" width="50"
                     src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
@@ -62,6 +72,7 @@
     </div>
 </template>
 
+<!-- SCRIPT -->
 <script setup>
 
 // Importaciones
@@ -72,6 +83,7 @@ import { PLATAFORMS } from '../icons/plataforms'
 import { GENRES } from '../icons/genres'
 import { onMounted } from 'vue';
 
+// Variables
 let result = ""
 let actualWins = 0;
 
