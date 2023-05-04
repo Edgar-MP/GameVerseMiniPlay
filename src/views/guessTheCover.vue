@@ -31,7 +31,7 @@
         <!-- Botón de nueva partida -->
         <div id="newGame" style="display: none">
             <button :onClick="newGame"
-                class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">NUeva
+                class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Nueva
                 Partida</button>
         </div>
         <!-- Contenedor de corazónes -->
@@ -39,23 +39,23 @@
             <!-- Corazón 0 -->
             <div id="heart0">
                 <img id="heart0Good" width="50"
-                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
+                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
                 <img id="heart0Bad" style="display: none;" width="50"
-                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
+                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
             <!-- Corazón 1 -->
             <div id="heart1">
                 <img id="heart1Good" width="50"
-                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
+                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
                 <img id="heart1Bad" style="display: none;" width="50"
-                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
+                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
             <!-- Corazón 2 -->
             <div id="heart2">
                 <img id="heart2Good" width="50"
-                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
+                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Ffcd0300deb4fd92735c20a6ea91ec1ca.png?alt=media">
                 <img id="heart2Bad" style="display: none;" width="50"
-                src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
+                    src="https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2FWither_29_JE2_BE2.webp?alt=media">
             </div>
             <!-- Corazón 3 -->
             <div id="heart3">
