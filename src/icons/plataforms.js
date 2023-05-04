@@ -29,7 +29,7 @@ export const PLATAFORMS = {
     },
     7: {
         name: "iOS",
-        slug: "https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Fandroid.webp?alt=media"
+        slug: "https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/icons%2Fios.webp?alt=media"
     },
     8: {
         name: "Nintendo Switch",
