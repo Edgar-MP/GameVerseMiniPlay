@@ -19,9 +19,9 @@
             <p class="mt-3">En este minijuego se te iran mostrando capturas de un videojuego y tendras que adivinar el
                 videojuego del que viene. </p>
             <p class=" text-center"><b>Cada día podras jugar una partida.</b></p>
-            <a href="#" class="">
+            <a href="/guess-the-screenshot" class="">
                 <button
-                    class="minecraft-btn relative top-8 w-48 text-center text-white truncate mx-auto px-4 py-1 border-2 border-b-4 hover:text-yellow-200">Proximamente!</button>
+                    class="minecraft-btn relative top-8 w-48 text-center text-white truncate mx-auto px-4 py-1 border-2 border-b-4 hover:text-yellow-200">Jugar!</button>
             </a>
         </article>
         <!-- Carta Nº3 -->
