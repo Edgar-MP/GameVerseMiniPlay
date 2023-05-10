@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory, routerKey } from "vue-router";
 import Home from './views/Home.vue'
 import guessTheCover from './views/guessTheCover.vue'
-import GuessTheScreenShoot from './views/GuessTheScreenShoot.vue'
+import GuessTheScreenShot from './views/GuessTheScreenShot.vue'
 
 
 
 const routes = [
     { path: '/', component: Home },
     { path: '/guess-the-cover', component: guessTheCover },
-    { path: '/guess-the-screenshoot', component: GuessTheScreenShoot },
+    { path: '/guess-the-screenshot', component: GuessTheScreenShot },
 ]
 
 const router = createRouter({
