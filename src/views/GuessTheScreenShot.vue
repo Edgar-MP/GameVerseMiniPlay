@@ -20,12 +20,12 @@
         <template v-for="(game, index) in gameListCustom" :key="index">
             <div class="grid grid-cols-2 gap-5" v-if="index <= getDays()">
                 <!-- Cargar botón para jugar -->
-                <button v-if="game.played" disabled
-                    class="bg-green-400/10 font-arcade text-center text-black px-4 py-3 rounded-lg transition-all w-48">
+                <button v-if="game.played"
+                    class="bg-green-400/10 font-arcade text-center text-black px-4 py-3 rounded-lg transition-all w-48 cursor-not-allowed">
                     {{ game.day }}</button>
-                <button v-if="!game.played"
-                    class="bg-green-400 font-arcade text-center text-black px-4 py-3 rounded-lg hover:bg-green-900 hover:text-white transition-all w-48">
-                    {{ game.day }}</button>
+                <a v-if="!game.played" :href="'/guess-the-screenshot/game/' + game.id"
+                    class="bg-green-400 font-arcade text-center text-black px-4 py-3 rounded-lg hover:bg-green-900 cursor-pointer hover:text-white transition-all w-48">
+                    {{ game.day }}</a>
                 <!-- Fin de botones -->
                 <!-- Cargar resultado de cada vida -->
                 <div class="flex items-center justify-center gap-3">
@@ -51,14 +51,19 @@
 <script setup>
 import { gameList } from '../assets/guessTheScreenshot.min'
 import { onMounted } from 'vue';
+let queryString = window.location.search;
+let urlParams = new URLSearchParams(queryString);
 
-
+if (urlParams.has('location')) {
+    let locationFilter = urlParams.get('idDay=');
+    console.log(locationFilter);
+}
 // Función que devuelve los días que hay desde el
 const getDays = () => {
     var date1 = new Date("5/10/2023");
-      var date2 = new Date();
-      var Difference_In_Time = date2.getTime() - date1.getTime();
-      return Math.floor(Difference_In_Time / (1000 * 3600 * 24))
+    var date2 = new Date();
+    var Difference_In_Time = date2.getTime() - date1.getTime();
+    return Math.floor(Difference_In_Time / (1000 * 3600 * 24))
     // return Math.ceil((date_2.getTime() - date_1.getTime()) / (1000 * 3600 * 24)) + 1;
 }
 
@@ -81,6 +86,8 @@ const checkPlayedDays = () => {
     for (let i = 0; i <= days; i++) {
         if (localStorage.getItem(i + "-status") === "finished")
             gameListCustom[i].played = true;
+        if (localStorage.getItem(i) == null) 
+            localStorage.setItem(i, JSON.stringify(["x", "x", "x", "x", "x", "x"]))
     }
 }
 
@@ -93,11 +100,11 @@ let gameListCustom = gameList;
 
 
 mounted: {
-    console.log("Antes");
-    console.log(gameListCustom);
     checkPlayedDays();
-    console.log("Despues");
-    console.log(gameListCustom);
+    for (let i = 0; i < gameListCustom.length; i++) {
+        console.log("object");
+        
+    }
 }
 
 
