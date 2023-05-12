@@ -1,7 +1,19 @@
 <template>
     <div class="flex justify-center mt-10 flex-wrap">
-        <!-- Contenedor de imágenes -->
+        <!-- Contenedor de imágenes y pistas -->
         <div class="aspect-video w-[848px] relative overflow-hidden max-h-[432px] basis-full justify-center flex">
+            <!-- Pistas -->
+            <p id="hint-1" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Puntuación de metacritic:
+                <span id="hint1">85%</span></p>
+            <p id="hint-2" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Plataformas en las que se
+                lanzo: <span id="hint2"></span></p>
+            <p id="hint-3" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Géneros: <span
+                    id="hint3"></span></p>
+            <p id="hint-4" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Año de lanzamiento: <span
+                    id="hint4"></span></p>
+            <p id="hint-5" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Desarrolladora: <span
+                    id="hint5"></span></p>
+            <!-- Imágenes -->
             <img id="img1" alt="Imagen 1" class="absolute visible w-full max-w-[848px] h-full max-h-[432px]"
                 :src="'https://firebasestorage.googleapis.com/v0/b/game-verse-mini-play.appspot.com/o/guessTheScreenshot%2F' + idGame + '_p1.jpg?alt=media'">
             <img id="img2" alt="Imagen 2" class="relative hidden w-full max-w-[848px] h-full max-h-[432px]"
@@ -17,62 +29,118 @@
         </div>
         <!-- Contenedor de botones -->
         <div class="grid grid-cols-6 w-96 gap-3 justify-center text-xl md:text-3xl mt-3 btn-container">
-            <button id="1" @click="changeImg(1)" class="actual active w-12 p-3 rounded-md">1</button>
-            <button id="2" @click="changeImg(2)" disabled class="active w-12 p-3 rounded-md">2</button>
-            <button id="3" @click="changeImg(3)" disabled class="active w-12 p-3 rounded-md">3</button>
-            <button id="4" @click="changeImg(4)" disabled class="active w-12 p-3 rounded-md">4</button>
-            <button id="5" @click="changeImg(5)" disabled class="active w-12 p-3 rounded-md">5</button>
-            <button id="6" @click="changeImg(6)" disabled class="active w-12 p-3 rounded-md">6</button>
+            <button id="1" @click="changeImg(1); changeHint(0)" class="actual active w-12 p-3 rounded-md">1</button>
+            <button id="2" @click="changeImg(2); changeHint(1)" disabled class="active w-12 p-3 rounded-md">2</button>
+            <button id="3" @click="changeImg(3); changeHint(2)" disabled class="active w-12 p-3 rounded-md">3</button>
+            <button id="4" @click="changeImg(4); changeHint(3)" disabled class="active w-12 p-3 rounded-md">4</button>
+            <button id="5" @click="changeImg(5); changeHint(4)" disabled class="active w-12 p-3 rounded-md">5</button>
+            <button id="6" @click="changeImg(6); changeHint(5)" disabled class="active w-12 p-3 rounded-md">6</button>
         </div>
         <!-- Caja de texto -->
-        <div
+        <div id="inputBox" v-if="checkState()"
             class="autocomplete autocomplete-guessTheScreenshot basis-full gueesTheScreenshot-input mt-5 flex justify-center">
             <input id="myInput" class="w-96" type="text" name="myVideogame" placeholder="Videojuego" v-model="result">
         </div>
         <!-- Contenedor con los botones -->
-        <div class="grid md:grid-cols-2 gap-2 mt-3 w-96">
+        <div id="btns" class="grid md:grid-cols-2 gap-2 mt-3 w-96" v-if="checkState()">
             <button :onClick="checkResult"
                 class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
-            <button :onClick="omitir"
+            <button :onClick="skip"
                 class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
         </div>
-        <!-- Contenedor con los resultados -->
-        <div id="results" style="display:none" class="text-center">
-            <p id="badResult" style="display: none;">El juego era:</p>
-            <h2 id="name"></h2>
-            <h3 id="year"></h3>
-        </div>
-        <!-- Contenedor con las pistas -->
-        <div id="clues" style="display:none">
-            <p class="text-center">Plataformas</p>
-            <div id="plataforms" class="flex justify-center"></div>
-            <p class="text-center">Generos</p>
-            <div id="genres" class="flex justify-center"></div>
-        </div>
-        <!-- Botón de nueva partida -->
-        <div id="newGame" style="display: none">
-            <button :onClick="newGame"
-                class="bg-green-300 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Nueva
-                Partida</button>
-        </div>
+    </div>
+    <!-- Contenedor con los resultados -->
+    <div id="results" class="text-center mt-3 md:text-2xl font-arcade">
+        <p id="badResult" style="display: none">El juego era:</p>
+        <p id="goodResult" style="display: none">Has Ganado!!</p>
+        <h2 id="name"></h2>
+        <h3 id="year" class="mt-2"></h3>
+    </div>
+    <!-- Botón de nueva partida -->
+    <div id="newGame" style="display: none" class="justify-center mt-4">
+        <a href="/guess-the-screenshot"
+            class="bg-green-400 font-arcade text-center text-black px-4 py-3 rounded-lg hover:bg-green-900 cursor-pointer hover:text-white transition-all">Más
+            partidas</a>
     </div>
 </template>
 
 <script setup>
 // Importar database
-import { checkResultWithCorrect, getIDs, getGamesTitles, getGameGenres, getGamePlataforms, getVideoGameNameAndYear } from '../database/databaseGuessTheScreenshot';
+import { checkResultWithCorrect, getIDs, getGamesTitles, getGameGenres, getGamePlataforms, getVideoGameNameAndYear, getHints } from '../database/databaseGuessTheScreenshot';
 
 let idGame = "";
+let result = "";
+let urlParams = new URLSearchParams(window.location.search).get('id');
 
 function getLastUrlSegment(url) {
     return new URL(url).pathname.split('/').filter(Boolean).pop();
 }
 
+const loadNameAndYear = () => {
+    console.log(idGame);
+    getVideoGameNameAndYear(idGame).then(e => {
+        document.getElementById("name").innerHTML = e[0];
+        document.getElementById("year").innerHTML = e[1];
+    })
+}
+
+const loadHints = () => {
+    console.log(idGame);
+    getHints(idGame).then(e => {
+        console.log("PISTAS");
+        console.log(e);
+        document.getElementById("hint1").innerHTML = e[0];
+        document.getElementById("hint2").innerHTML = e[1];
+        document.getElementById("hint3").innerHTML = e[2];
+        document.getElementById("hint4").innerHTML = e[3];
+        document.getElementById("hint5").innerHTML = e[4];
+    })
+}
+
+const checkState = () => {
+    if (localStorage.getItem(idGame) < 6)
+        return true
+
+    return false
+}
+
+const loadDefeat = () => {
+    document.getElementById("results").style.display = "block";
+    document.getElementById("badResult").style.display = "block";
+    document.getElementById("newGame").style.display = "flex";
+    localStorage.setItem(urlParams + "-status", "defeat");
+    document.getElementById("inputBox").style.display = "none";
+    document.getElementById("btns").style.display = "none";
+    loadBtns(6);
+    loadNameAndYear();
+}
+
+const loadWin = () => {
+    saveResults("a")
+    console.log("Lo has adivinado");
+    localStorage.setItem(idGame, 6);
+    localStorage.setItem(urlParams + "-status", "win");
+    document.getElementById("results").style.display = "block";
+    document.getElementById("goodResult").style.display = "block";
+    document.getElementById("newGame").style.display = "flex";
+    document.getElementById("inputBox").style.display = "none";
+    document.getElementById("btns").style.display = "none";
+    loadBtns(6);
+    loadNameAndYear();
+}
+
+const skip = () => {
+    saveResults("o");
+    if (localStorage.getItem(idGame) < 6)
+        nextImg();
+    else {
+        loadDefeat();
+    }
+}
+
 
 const loadBtns = (cant) => {
-    console.log("cant: " + cant);
     for (let i = 1; i <= cant; i++) {
-        console.log("object");
         document.getElementById(i).disabled = false;
     }
 }
@@ -84,20 +152,62 @@ mounted: {
 
 }
 
-console.log(idGame);
+const saveResults = (letter) => {
+    let position = localStorage.getItem(idGame) - 1;
+    let arr = JSON.parse(localStorage.getItem(urlParams));
+    arr[position] = letter;
+    localStorage.setItem(urlParams, JSON.stringify(arr));
+}
 
 
+
+// Función que comprueba el resultado
+const checkResult = () => {
+    if (result !== "") {
+        checkResultWithCorrect(idGame, result).then(e => {
+            if (e) {
+                // Has adivinado el juego
+                loadWin()
+            } else {
+                // No lo has adivinado
+                saveResults("f");
+                console.log("No lo has adivinado");
+                nextImg();
+                result = "";
+                document.getElementById("myInput").value = "";
+            }
+        })
+    }
+
+}
+
+const nextImg = () => {
+    localStorage.setItem(idGame, Number(localStorage.getItem(idGame)) + 1);
+    changeImg(localStorage.getItem(idGame));
+    loadBtns(localStorage.getItem(idGame));
+    changeHint(localStorage.getItem(idGame));
+}
 
 // A realizar una vez cargado el contenido del DOM
 document.addEventListener("DOMContentLoaded", () => {
-    loadBtns(localStorage.getItem(idGame));
-    getGamesTitles().then(e => {
-        autocomplete(document.getElementById("myInput"), e);
-    })
+
+    loadHints();
+    if (localStorage.getItem(urlParams+"-status") == "-") {
+        loadBtns(localStorage.getItem(idGame));
+        getGamesTitles().then(e => {
+            autocomplete(document.getElementById("myInput"), e);
+        })
+    }
+    else {
+        if (localStorage.getItem(urlParams + "-status") == "win")
+            loadWin();
+        else
+            loadDefeat();
+    }
+
 });
 
 const changeImg = (id) => {
-    console.log(id);
     for (let i = 1; i <= 6; i++) {
         if (i == id)
             document.getElementById("img" + i).style.display = "block";
@@ -106,6 +216,25 @@ const changeImg = (id) => {
         document.getElementById(i).classList.remove("actual")
     }
     document.getElementById(id).classList.add("actual")
+}
+
+const changeHint = (id) => {
+    for (let i = 1; i <= 5; i++) {
+        if (id != 0) {
+            if (i == id)
+                document.getElementById("hint-" + i).style.display = "block";
+            else {
+                document.getElementById("hint-" + i).style.display = "none";
+            }
+            console.log(i);
+        } else {
+            document.getElementById("hint-1").style.display = "none";
+            document.getElementById("hint-2").style.display = "none";
+            document.getElementById("hint-3").style.display = "none";
+            document.getElementById("hint-4").style.display = "none";
+            document.getElementById("hint-5").style.display = "none";
+        }
+    }
 }
 
 // Funciones para el autocompletado de opciones

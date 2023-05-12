@@ -1,15 +1,15 @@
 <template>
-    <div class="grid md:grid-cols-3 mt-10">
+    <div class="grid grid-cols-2 md:grid-cols-3 mt-10">
         <!-- Leyenda -->
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-center md:justify-end">
             <span class="bg-orange-400 rounded-sm w-5 h-5"></span>
             <span>&nbsp;&nbsp;= Saltado</span>
         </div>
-        <div class="flex items-center justify-center">
+        <div class="flex items-center justify-center md:justify-center">
             <span class="bg-red-400 rounded-sm w-5 h-5"></span>
             <span>&nbsp;&nbsp;= Fallado</span>
         </div>
-        <div class="flex items-center justify-start">
+        <div class="flex items-center justify-center col-span-2 md:col-auto md:justify-start">
             <span class="bg-green-400 rounded-sm w-5 h-5"></span>
             <span>&nbsp;&nbsp;= Acertado</span>
         </div>
@@ -23,7 +23,7 @@
                 <button v-if="game.played"
                     class="bg-green-400/10 font-arcade text-center text-black px-4 py-3 rounded-lg transition-all w-48 cursor-not-allowed">
                     {{ game.day }}</button>
-                <a v-if="!game.played" :href="'/guess-the-screenshot/game/' + game.id"
+                <a v-if="!game.played" :href="'/guess-the-screenshot/game/' + game.id + '?id=' + index"
                     class="bg-green-400 font-arcade text-center text-black px-4 py-3 rounded-lg hover:bg-green-900 cursor-pointer hover:text-white transition-all w-48">
                     {{ game.day }}</a>
                 <!-- Fin de botones -->
@@ -84,10 +84,13 @@ const checkPlayedDays = () => {
     let days = getDays();
     console.log("Days: " + days);
     for (let i = 0; i <= days; i++) {
-        if (localStorage.getItem(i + "-status") === "finished")
+        if (localStorage.getItem(i + "-status") === "win" || localStorage.getItem(i + "-status") === "defeat")
             gameListCustom[i].played = true;
         if (localStorage.getItem(i) == null) 
             localStorage.setItem(i, JSON.stringify(["x", "x", "x", "x", "x", "x"]))
+            
+        if (localStorage.getItem(i+"-status") == null) 
+            localStorage.setItem(i+"-status", "-")
     }
 }
 

@@ -38,7 +38,7 @@ export async function getGamesTitles() {
 // Función que comprueba si la respuesta es correcta
 export async function checkResultWithCorrect(idGame, result) {
     try {
-        const docRef = doc(db, "guessTheCover", idGame);
+        const docRef = doc(db, "guessTheScreenshot", idGame);
         const docSnap = await getDoc(docRef);
         if (docSnap.data().name === result)
             return true
@@ -53,10 +53,13 @@ export async function checkResultWithCorrect(idGame, result) {
 export async function getVideoGameNameAndYear(idGame) {
     try {
         let g = [];
-        const docRef = doc(db, "guessTheCover", idGame);
+        console.log(idGame);
+        const docRef = doc(db, "guessTheScreenshot", idGame);
         const docSnap = await getDoc(docRef);
+        console.log(docSnap.data());
         g[0] = docSnap.data().name;
-        g[1] = docSnap.data().year;
+        g[1] = docSnap.data().hint4;
+        console.log(g);
         return g;
     } catch (error) {
         console.log(error);
@@ -64,10 +67,30 @@ export async function getVideoGameNameAndYear(idGame) {
     }
 }
 
+// Función que devuelve un array con las istas
+export async function getHints(idGame) {
+    try {
+        console.log(idGame);
+        const docRef = doc(db, "guessTheScreenshot", idGame);
+        const docSnap = await getDoc(docRef);
+        console.log(docSnap.data());
+        return [
+            docSnap.data().hint1,
+            docSnap.data().hint2,
+            docSnap.data().hint3,
+            docSnap.data().hint4,
+            docSnap.data().hint5
+            ];
+    } catch (error) {
+        console.log(error);
+        return "No hints";
+    }
+}
+
 // Función que devuelve las plataformas
 export async function getGamePlataforms(idGame) {
     try {
-        const docRef = doc(db, "guessTheCover", idGame);
+        const docRef = doc(db, "guessTheScreenshot", idGame);
         const docSnap = await getDoc(docRef);
         let gamesTitles = [];
         docSnap.data().plataforms.forEach((plat) => {
@@ -83,7 +106,7 @@ export async function getGamePlataforms(idGame) {
 // Función que devuelve los generos
 export async function getGameGenres(idGame) {
     try {
-        const docRef = doc(db, "guessTheCover", idGame);
+        const docRef = doc(db, "guessTheScreenshot", idGame);
         const docSnap = await getDoc(docRef);
         let gamesTitles = [];
         docSnap.data().plataforms.forEach((plat) => {
