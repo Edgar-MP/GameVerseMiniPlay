@@ -274,8 +274,7 @@ const resetHearts = () => {
 
 // Operaciones varias ha realizar antes de cargar el DOM
 mounted: {
-    // Obtener titulos de los videojuegos para cargar el autocomplete
-    autocomplete(document.getElementById("myInput"), gameList);
+    
 
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {

@@ -6,8 +6,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.autocomplete-items-guessTheScreenshot {
-  height: 20em;
+.autocomplete-items-guessTheScreenshot, .autocomplete-items {
+  height: 10em;
   overflow: auto;
 }
 body {
