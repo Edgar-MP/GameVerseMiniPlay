@@ -275,9 +275,8 @@ const resetHearts = () => {
 // Operaciones varias ha realizar antes de cargar el DOM
 mounted: {
     // Obtener titulos de los videojuegos para cargar el autocomplete
-    getGamesTitles().then(e => {
-        autocomplete(document.getElementById("myInput"), gameList);
-    })
+    autocomplete(document.getElementById("myInput"), gameList);
+
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {
         localStorage.allwaysMaxWins = "-";
@@ -356,9 +355,7 @@ const newGame = () => {
     localStorage.setItem("guessTheCoverPhase", 0);
     resetHearts();
     loadGamesInLocalStorage();
-    getGamesTitles().then(e => {
-        autocomplete(document.getElementById("myInput"), e);
-    })
+    autocomplete(document.getElementById("myInput"), gameList);
     document.getElementById("badResult").style.display = "none";
     document.getElementById("playableBtns").style.display = "grid";
     localStorage.removeItem("guessTheCoverWin");
@@ -412,9 +409,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loadLost();
     }
 
-    getGamesTitles().then(e => {
-        autocomplete(document.getElementById("myInput"), e);
-    })
+    autocomplete(document.getElementById("myInput"), gameList);
+
     if (localStorage.getItem("guessTheCoverWin")) {
         loadWin();
     }
