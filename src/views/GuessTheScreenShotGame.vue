@@ -67,6 +67,8 @@
 <script setup>
 // Importar database
 import { checkResultWithCorrect, getIDs, getGamesTitles, getGameGenres, getGamePlataforms, getVideoGameNameAndYear, getHints } from '../database/databaseGuessTheScreenshot';
+import { gameList } from '../assets/videoGamesList'
+
 
 let idGame = "";
 let result = "";
@@ -194,9 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadHints();
     if (localStorage.getItem(urlParams+"-status") == "-") {
         loadBtns(localStorage.getItem(idGame));
-        getGamesTitles().then(e => {
-            autocomplete(document.getElementById("myInput"), e);
-        })
+        autocomplete(document.getElementById("myInput"), gameList);
     }
     else {
         if (localStorage.getItem(urlParams + "-status") == "win")

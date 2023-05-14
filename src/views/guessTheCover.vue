@@ -82,6 +82,7 @@ import '@websitebeaver/vue-magnifier/styles.css';
 import { PLATAFORMS } from '../icons/plataforms'
 import { GENRES } from '../icons/genres'
 import { onMounted } from 'vue';
+import { gameList } from '../assets/videoGamesList'
 
 // Variables
 let result = ""
@@ -275,7 +276,7 @@ const resetHearts = () => {
 mounted: {
     // Obtener titulos de los videojuegos para cargar el autocomplete
     getGamesTitles().then(e => {
-        autocomplete(document.getElementById("myInput"), e);
+        autocomplete(document.getElementById("myInput"), gameList);
     })
     // Comprobar si es la primera vez que se entra
     if (!localStorage.guessTheCoverFirstGamePlayed) {

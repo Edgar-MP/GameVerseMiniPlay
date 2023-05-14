@@ -28,6 +28,7 @@ export async function getGamesTitles() {
         querySnapshot.forEach((doc) => {
             gamesTitles.push(doc.data().name)
         })
+        console.log(gamesTitles);
         return gamesTitles;
     } catch (error) {
         console.log(error);
