@@ -37,12 +37,12 @@
             <button id="6" @click="changeImg(6); changeHint(5)" disabled class="active w-12 p-3 rounded-md">6</button>
         </div>
         <!-- Caja de texto -->
-        <div id="inputBox" v-if="checkState()"
+        <div id="inputBox"
             class="autocomplete autocomplete-guessTheScreenshot basis-full gueesTheScreenshot-input mt-5 flex justify-center">
             <input id="myInput" class="w-96" type="text" name="myVideogame" placeholder="Videojuego" v-model="result">
         </div>
         <!-- Contenedor con los botones -->
-        <div id="btns" class="grid md:grid-cols-2 gap-2 mt-3 w-96" v-if="checkState()">
+        <div id="btns" class="grid md:grid-cols-2 gap-2 mt-3 w-96">
             <button :onClick="checkResult"
                 class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
             <button :onClick="skip"
