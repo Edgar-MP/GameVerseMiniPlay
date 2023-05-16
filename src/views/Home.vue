@@ -29,6 +29,10 @@
             <h2>Notas de versión</h2>
             <div class="overflow-auto h-[20em]">
                 <div class="border-b-2 border-gray-700 mt-3">
+                    <h2>Versión 1.0</h2>
+                    <p class="text-left mt-2">Lanzamiento oficial!! 🎉🎉</p>
+                </div>
+                <div class="border-b-2 border-gray-700 mt-3">
                     <h2>Versión 0.5</h2>
                     <p class="text-left mt-2">En esta Versión se han arreglado bugs</p>
                 </div>
