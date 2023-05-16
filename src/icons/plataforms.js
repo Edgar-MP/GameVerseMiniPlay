@@ -1,3 +1,4 @@
+//! Documento con la lista de plataformas que es usada para mostrar los iconos
 export const PLATAFORMS = {
     0: {
         name: "PC (Windows)",

@@ -303,15 +303,17 @@ const reloadWins = () => {
     if (localStorage.getItem("allwaysMaxWins") == "-") {
         localStorage.setItem("allwaysMaxWins", localStorage.getItem("currentWins"));
     }
-    if (localStorage.getItem("allwaysMaxWins") < localStorage.getItem("currentWins")) {
+    if (Number(localStorage.getItem("allwaysMaxWins")) < Number(localStorage.getItem("currentWins"))) {
         localStorage.setItem("allwaysMaxWins", localStorage.getItem("currentWins"));
     }
 }
 
 // Función para recargar el panel de rachas
 const reloadFrontViews = () => {
-    document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
-    document.getElementById("currentWins").innerHTML = localStorage.getItem("currentWins");
+    if (localStorage.getItem("allwaysMaxWins") != null)
+        document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
+    if (localStorage.getItem("currentWins") != null)
+        document.getElementById("currentWins").innerHTML = localStorage.getItem("currentWins");
 }
 
 // Función para cargar la victoria
@@ -407,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadImg(getImg());
         loadLost();
     }
-
+    reloadFrontViews();
     autocomplete(document.getElementById("myInput"), gameList);
 
     if (localStorage.getItem("guessTheCoverWin")) {

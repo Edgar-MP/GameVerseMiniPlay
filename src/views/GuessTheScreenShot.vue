@@ -49,25 +49,24 @@
 </template>
 
 <script setup>
+// Importaciones necesarias
 import { gameList } from '../assets/guessTheScreenshot.min'
-import { onMounted } from 'vue';
 let queryString = window.location.search;
 let urlParams = new URLSearchParams(queryString);
 
+// Comprobar si la URL tiene un parámetro denominado "location" y, si lo tiene, extraer el valor del parámetro idDay.
 if (urlParams.has('location')) {
     let locationFilter = urlParams.get('idDay=');
-    console.log(locationFilter);
 }
-// Función que devuelve los días que hay desde el
+// Función que devuelve los días que hay desde el lanzamiento de la aplicación (10/5/2023) hasta el día actual
 const getDays = () => {
     var date1 = new Date("5/10/2023");
     var date2 = new Date();
     var Difference_In_Time = date2.getTime() - date1.getTime();
     return Math.floor(Difference_In_Time / (1000 * 3600 * 24))
-    // return Math.ceil((date_2.getTime() - date_1.getTime()) / (1000 * 3600 * 24)) + 1;
 }
 
-// 
+// Obtener los resultados obternidos un día
 const getResultsOfDay = (day) => {
     // Acierto = a
     // Fallo = f
@@ -79,10 +78,9 @@ const getResultsOfDay = (day) => {
     return ["z", "z", "z", "z", "z", "z"]
 }
 
-// 
+// Comprobar los días jugados
 const checkPlayedDays = () => {
     let days = getDays();
-    console.log("Days: " + days);
     for (let i = 0; i <= days; i++) {
         if (localStorage.getItem(i + "-status") === "win" || localStorage.getItem(i + "-status") === "defeat")
             gameListCustom[i].played = true;
@@ -97,17 +95,9 @@ const checkPlayedDays = () => {
 let gameListCustom = gameList;
 
 
-
-
-
-
-
+// Realizar antes de cargar la página
 mounted: {
     checkPlayedDays();
-    for (let i = 0; i < gameListCustom.length; i++) {
-        console.log("object");
-        
-    }
 }
 
 

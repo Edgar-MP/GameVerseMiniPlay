@@ -26,15 +26,24 @@
         </article>
         <!-- Carta Nº3 -->
         <article class="bg-white/90 mx-auto rounded-md p-10 text-center min-h-[20em] h-full w-full">
+            <h2>Notas de versión</h2>
             <div class="overflow-auto h-[20em]">
                 <div class="border-b-2 border-gray-700 mt-3">
+                    <h2>Versión 0.5</h2>
+                    <p class="text-left mt-2">En esta Versión se han arreglado bugs</p>
+                </div>
+                <div class="border-b-2 border-gray-700 mt-3">
+                    <h2>Versión 0.4</h2>
+                    <p class="text-left mt-2">En esta Versión se han agregado nuevos videojuegos</p>
+                </div>
+                <div class="border-b-2 border-gray-700 mt-3">
                     <h2>Versión 0.3</h2>
-                    <p class="text-left mt-2">En esta Versión se ha añadido la lógica del minijuego Adivina la portada</p>
+                    <p class="text-left mt-2">En esta Versión se ha implementado el minijuego Adivina la captura</p>
                 </div>
 
-                <div class="border-b-2 border-gray-700">
+                <div class="border-b-2 border-gray-700 mt-3">
                     <h2>Versión 0.2</h2>
-                    <p class="text-left mt-2">En esta Versión se ha añadido el estilo del minijuego Adivina la portada</p>
+                    <p class="text-left mt-2">En esta Versión se ha implementado el minijuego Adivina la portada</p>
                 </div>
 
                 <div class="border-b-2 border-gray-700 mt-3">

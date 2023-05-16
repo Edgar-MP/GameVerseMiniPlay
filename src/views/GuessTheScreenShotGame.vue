@@ -66,7 +66,7 @@
 
 <script setup>
 // Importar database
-import { checkResultWithCorrect, getIDs, getGamesTitles, getGameGenres, getGamePlataforms, getVideoGameNameAndYear, getHints } from '../database/databaseGuessTheScreenshot';
+import { checkResultWithCorrect, getVideoGameNameAndYear, getHints } from '../database/databaseGuessTheScreenshot';
 import { gameList } from '../assets/videoGamesList'
 
 
@@ -74,23 +74,23 @@ let idGame = "";
 let result = "";
 let urlParams = new URLSearchParams(window.location.search).get('id');
 
+// Obtener id del Día
 function getLastUrlSegment(url) {
     return new URL(url).pathname.split('/').filter(Boolean).pop();
 }
 
+// Cargar año y nombre del videojuego
 const loadNameAndYear = () => {
-    console.log(idGame);
     getVideoGameNameAndYear(idGame).then(e => {
         document.getElementById("name").innerHTML = e[0];
         document.getElementById("year").innerHTML = e[1];
     })
 }
 
+// Cargar pistas
 const loadHints = () => {
-    console.log(idGame);
+    (idGame);
     getHints(idGame).then(e => {
-        console.log("PISTAS");
-        console.log(e);
         document.getElementById("hint1").innerHTML = e[0];
         document.getElementById("hint2").innerHTML = e[1];
         document.getElementById("hint3").innerHTML = e[2];
@@ -98,7 +98,7 @@ const loadHints = () => {
         document.getElementById("hint5").innerHTML = e[4];
     })
 }
-
+// Comprobar estado de la parida
 const checkState = () => {
     if (localStorage.getItem(idGame) < 6)
         return true
@@ -106,6 +106,7 @@ const checkState = () => {
     return false
 }
 
+// Cargar derrota
 const loadDefeat = () => {
     document.getElementById("results").style.display = "block";
     document.getElementById("badResult").style.display = "block";
@@ -117,9 +118,9 @@ const loadDefeat = () => {
     loadNameAndYear();
 }
 
+// Cargar victoria
 const loadWin = () => {
     saveResults("a")
-    console.log("Lo has adivinado");
     localStorage.setItem(idGame, 6);
     localStorage.setItem(urlParams + "-status", "win");
     document.getElementById("results").style.display = "block";
@@ -131,6 +132,7 @@ const loadWin = () => {
     loadNameAndYear();
 }
 
+// Saltar el turno
 const skip = () => {
     saveResults("o");
     if (localStorage.getItem(idGame) < 6)
@@ -140,13 +142,14 @@ const skip = () => {
     }
 }
 
-
+// Cargar botones
 const loadBtns = (cant) => {
     for (let i = 1; i <= cant; i++) {
         document.getElementById(i).disabled = false;
     }
 }
 
+// Cargar antes de cargar la página
 mounted: {
     idGame = getLastUrlSegment(window.location.href);
     if (localStorage.getItem(idGame) == null)
@@ -154,6 +157,7 @@ mounted: {
 
 }
 
+// Guardar resultados en el localStorage
 const saveResults = (letter) => {
     let position = localStorage.getItem(idGame) - 1;
     let arr = JSON.parse(localStorage.getItem(urlParams));
@@ -173,7 +177,6 @@ const checkResult = () => {
             } else {
                 // No lo has adivinado
                 saveResults("f");
-                console.log("No lo has adivinado");
                 nextImg();
                 result = "";
                 document.getElementById("myInput").value = "";
@@ -183,6 +186,7 @@ const checkResult = () => {
 
 }
 
+// mostrar siguiente imaen
 const nextImg = () => {
     localStorage.setItem(idGame, Number(localStorage.getItem(idGame)) + 1);
     changeImg(localStorage.getItem(idGame));
@@ -207,6 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+// Cambiar imagen
 const changeImg = (id) => {
     for (let i = 1; i <= 6; i++) {
         if (i == id)
@@ -218,6 +223,7 @@ const changeImg = (id) => {
     document.getElementById(id).classList.add("actual")
 }
 
+// Cambiar la pista
 const changeHint = (id) => {
     for (let i = 1; i <= 5; i++) {
         if (id != 0) {
@@ -226,7 +232,6 @@ const changeHint = (id) => {
             else {
                 document.getElementById("hint-" + i).style.display = "none";
             }
-            console.log(i);
         } else {
             document.getElementById("hint-1").style.display = "none";
             document.getElementById("hint-2").style.display = "none";

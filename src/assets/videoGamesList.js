@@ -1,3 +1,4 @@
+//! Documento con la lista de videojuegos que es usada para autocompletar
 export const gameList = [
     "1971 : Indian Naval Front",
     "7 Days to Die",

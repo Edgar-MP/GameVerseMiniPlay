@@ -4,8 +4,7 @@ import guessTheCover from './views/guessTheCover.vue'
 import GuessTheScreenShot from './views/GuessTheScreenShot.vue'
 import GuessTheScreenShotGame from './views/GuessTheScreenShotGame.vue'
 
-
-
+// Rutas de la aplicación web
 const routes = [
     { path: '/', component: Home },
     { path: '/guess-the-cover', component: guessTheCover },

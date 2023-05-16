@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore/lite';
 
+// Configuración de firebase
 const firebaseConfig = {
     apiKey: "AIzaSyB1WAoED3Mcy3Po0vZGex8HWR6XZm2JNzA",
     authDomain: "game-verse-mini-play.firebaseapp.com",
