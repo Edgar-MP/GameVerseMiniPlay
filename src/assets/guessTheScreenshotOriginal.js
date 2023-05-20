@@ -54,21 +54,25 @@ export const gameList = {
         "played" : false
     },
     "9": {
+        // Dark Souls
         "id" : "ndu2Pw9nYzIRZP4YXbGF",
         "day" : "19/05/2023",
         "played" : false
     },
     "10": {
+        // Among Us
         "id" : "SMERcQgworeir9Nl4vLU",
         "day" : "20/05/2023",
         "played" : false
     },
     "11": {
+        // Ocarina
         "id" : "xsT7KgOmnh0ST2y4DKEQ",
         "day" : "21/05/2023",
         "played" : false
     },
     "12": {
+        // Horizon Zero Dawn
         "id" : "ZAy44aVBSBggOdJC8fab",
         "day" : "22/05/2023",
         "played" : false

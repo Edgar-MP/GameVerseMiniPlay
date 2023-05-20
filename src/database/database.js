@@ -1,4 +1,4 @@
-import { collection, query, getDocs, where, getDoc, doc, setDoc } from 'firebase/firestore/lite'
+import { collection, query, getDocs, where, getDoc, doc, setDoc } from 'firebase/firestore'
 import { defineStore } from "pinia";
 import { db } from '../firebaseConfig'
 const coll = collection(db, "guessTheCover");

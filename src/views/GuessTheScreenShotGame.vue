@@ -165,8 +165,6 @@ const saveResults = (letter) => {
     localStorage.setItem(urlParams, JSON.stringify(arr));
 }
 
-
-
 // Función que comprueba el resultado
 const checkResult = () => {
     if (result !== "") {
@@ -191,7 +189,7 @@ const nextImg = () => {
     localStorage.setItem(idGame, Number(localStorage.getItem(idGame)) + 1);
     changeImg(localStorage.getItem(idGame));
     loadBtns(localStorage.getItem(idGame));
-    changeHint(localStorage.getItem(idGame));
+    changeHint(Number(localStorage.getItem(idGame))-1);
 }
 
 // A realizar una vez cargado el contenido del DOM
@@ -309,5 +307,4 @@ function autocomplete(inp, arr) {
         closeAllLists(e.target);
     });
 }
-
 </script>

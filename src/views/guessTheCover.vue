@@ -1,3 +1,4 @@
+/*
 <template>
     <!-- Contenedo principal -->
     <div id="guessTheCover" class="m-auto justify-center justify-items-center mt-14 grid">
@@ -488,3 +489,4 @@ function autocomplete(inp, arr) {
 }
 
 </script>
+*/

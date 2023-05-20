@@ -54,12 +54,15 @@
                     <h2>Versión 0.1</h2>
                     <p class="text-left mt-2">En esta Versión se ha añadido el menú de la home</p>
                 </div>
-                
+
             </div>
         </article>
+
+
     </section>
 </template>
 
 <script setup>
+
 
 </script>
