@@ -116,7 +116,7 @@ export default {
         },
         verificarContraseña() {
             // Verificar la contraseña aquí (puedes usar una condición if/else)
-            if (this.password === "2qmsAA2n") {
+            if (this.password === "edgar") {
                 // Almacenar la contraseña en el almacenamiento local
                 localStorage.setItem("password", this.password);
                 // Establecer la fecha de expiración a 1 día después
