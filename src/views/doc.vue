@@ -145,8 +145,7 @@ export default {
                 const files = Array.from(this.$refs.images.files);
 
                 const uploadPromises = files.map((file) => {
-                    const imageName = `${this.documentoId}_${file.name}`; // Nombre único para la imagen
-                    console.log(imageName);
+                    const imageName = `${this.documentoId}_p${file.name}`; // Nombre único para la imagen
                     const fileRef = ref(storageRef, `guessTheScreenshot/${imageName}`);
                     return uploadBytesResumable(fileRef, file);
                 });

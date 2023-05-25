@@ -78,31 +78,37 @@ export const gameList = {
         "played" : false
     },
     "13": {
+        // The Secret of Monkey Island
         "id" : "kSFcx0liOJmHlGsMGRdG",
         "day" : "23/05/2023",
         "played" : false
     },
     "14": {
+        // Grand Theft Auto III
         "id" : "4bK3MhQ7hDRjuZW1D2Uh",
         "day" : "24/05/2023",
         "played" : false
     },
     "15": {
+        // Portal 2
         "id" : "4rspByJn5RsZEODjRU15",
         "day" : "25/05/2023",
         "played" : false
     },
     "16": {
+        // Shadow of the Colossus
         "id" : "Ro7O5TS4zrLQTb5XCAId",
         "day" : "26/05/2023",
         "played" : false
     },
     "17": {
+        // Mario Golf
         "id" : "yAORhwA0vBsP3x9YX3aT",
         "day" : "27/05/2023",
         "played" : false
     },
     "18": {
+        // Call of Duty: Modern Warfare 2
         "id" : "gbdpz8PfXQb9XkXEzbBn",
         "day" : "28/05/2023",
         "played" : false

@@ -40,6 +40,7 @@
         <div id="inputBox"
             class="autocomplete autocomplete-guessTheScreenshot basis-full gueesTheScreenshot-input mt-5 flex justify-center">
             <input id="myInput" class="w-96" type="text" name="myVideogame" placeholder="Videojuego" v-model="result">
+            <div class="myInputautocomplete-list"></div>
         </div>
         <!-- Contenedor con los botones -->
         <div id="btns" class="grid md:grid-cols-2 gap-2 mt-3 w-96">
@@ -239,11 +240,9 @@ const changeHint = (id) => {
         }
     }
 }
-
-// Funciones para el autocompletado de opciones
 function autocomplete(inp, arr) {
     var currentFocus;
-    inp.addEventListener("input", function (e) {
+    inp.addEventListener("input", function(e) {
         var a, b, i, val = this.value;
         closeAllLists();
         if (!val) { return false; }
@@ -253,12 +252,11 @@ function autocomplete(inp, arr) {
         a.setAttribute("class", "autocomplete-items-guessTheScreenshot");
         this.parentNode.appendChild(a);
         for (i = 0; i < arr.length; i++) {
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            if (arr[i].toUpperCase().includes(val.toUpperCase())) {
                 b = document.createElement("DIV");
-                b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                b.innerHTML += arr[i].substr(val.length);
+                b.innerHTML = arr[i].replace(new RegExp(val, "gi"), "<strong>$&</strong>");
                 b.innerHTML += `<input type='hidden' value="${arr[i]}">`;
-                b.addEventListener("click", function (e) {
+                b.addEventListener("click", function(e) {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     result = this.getElementsByTagName("input")[0].value;
                     closeAllLists();
@@ -267,7 +265,7 @@ function autocomplete(inp, arr) {
             }
         }
     });
-    inp.addEventListener("keydown", function (e) {
+    inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
         if (x) x = x.getElementsByTagName("div");
         if (e.keyCode == 40) {
@@ -303,8 +301,10 @@ function autocomplete(inp, arr) {
             }
         }
     }
-    document.addEventListener("click", function (e) {
+    document.addEventListener("click", function(e) {
         closeAllLists(e.target);
     });
 }
+
+
 </script>

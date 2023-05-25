@@ -16,7 +16,7 @@ body {
 
 /*! Estilos del Autocomplete */
 .autocomplete-items-guessTheScreenshot, .autocomplete-items {
-  height: 10em;
+  max-height: 10em;
   overflow: auto;
 }
 
