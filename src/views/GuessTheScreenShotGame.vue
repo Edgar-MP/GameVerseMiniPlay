@@ -210,7 +210,6 @@ document.addEventListener("DOMContentLoaded", () => {
         else
             loadDefeat();
     }
-
 });
 
 // Cambiar imagen
