@@ -417,6 +417,16 @@ document.addEventListener("DOMContentLoaded", () => {
         loadWin();
     }
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
+    if (localStorage.getItem("autocompleteLoaded")) {
+        localStorage.removeItem("autocompleteLoaded");
+    }
+    document.getElementById("myInput").addEventListener("keydown", () => {
+        if (!localStorage.getItem("autocompleteLoaded")) {
+            console.log("object");
+            autocomplete(document.getElementById("myInput"), gameList);
+            localStorage.setItem("autocompleteLoaded", "load");
+        }
+    })
 });
 
 
