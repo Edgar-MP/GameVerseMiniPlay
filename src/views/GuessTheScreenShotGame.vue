@@ -4,8 +4,7 @@
         <div class="aspect-video w-[848px] relative overflow-hidden max-h-[432px] basis-full justify-center flex">
             <!-- Pistas -->
             <p id="hint-1" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Puntuación de metacritic:
-                <span id="hint1">85%</span>
-            </p>
+                <span id="hint1">85%</span></p>
             <p id="hint-2" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Plataformas en las que se
                 lanzo: <span id="hint2"></span></p>
             <p id="hint-3" class="bg-black/40 px-4 py-2 absolute z-50" style="display: none;">Géneros: <span
@@ -31,23 +30,23 @@
         <!-- Contenedor de botones -->
         <div class="grid grid-cols-6 w-96 gap-3 justify-center text-xl md:text-3xl mt-3 btn-container">
             <button id="1" @click="changeImg(1); changeHint(0)" class="actual active w-12 p-3 rounded-md">1</button>
-            <button id="2" @click=" changeImg(2); changeHint(1) " disabled class="active w-12 p-3 rounded-md">2</button>
-            <button id="3" @click=" changeImg(3); changeHint(2) " disabled class="active w-12 p-3 rounded-md">3</button>
-            <button id="4" @click=" changeImg(4); changeHint(3) " disabled class="active w-12 p-3 rounded-md">4</button>
-            <button id="5" @click=" changeImg(5); changeHint(4) " disabled class="active w-12 p-3 rounded-md">5</button>
-            <button id="6" @click=" changeImg(6); changeHint(5) " disabled class="active w-12 p-3 rounded-md">6</button>
+            <button id="2" @click="changeImg(2); changeHint(1)" disabled class="active w-12 p-3 rounded-md">2</button>
+            <button id="3" @click="changeImg(3); changeHint(2)" disabled class="active w-12 p-3 rounded-md">3</button>
+            <button id="4" @click="changeImg(4); changeHint(3)" disabled class="active w-12 p-3 rounded-md">4</button>
+            <button id="5" @click="changeImg(5); changeHint(4)" disabled class="active w-12 p-3 rounded-md">5</button>
+            <button id="6" @click="changeImg(6); changeHint(5)" disabled class="active w-12 p-3 rounded-md">6</button>
         </div>
         <!-- Caja de texto -->
         <div id="inputBox"
             class="autocomplete autocomplete-guessTheScreenshot basis-full gueesTheScreenshot-input mt-5 flex justify-center">
-            <input id="myInput" class="w-96" type="text" name="myVideogame" placeholder="Videojuego" v-model=" result ">
+            <input id="myInput" class="w-96" type="text" name="myVideogame" placeholder="Videojuego" v-model="result">
             <div class="myInputautocomplete-list"></div>
         </div>
         <!-- Contenedor con los botones -->
         <div id="btns" class="grid md:grid-cols-2 gap-2 mt-3 w-96">
-            <button :onClick=" checkResult "
+            <button :onClick="checkResult"
                 class="bg-green-700 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-green-900 transition-all">Adivinar!</button>
-            <button :onClick=" skip "
+            <button :onClick="skip"
                 class="bg-amber-400 font-arcade text-center text-white px-4 py-3 rounded-lg hover:bg-amber-900 transition-all">Omitir</button>
         </div>
     </div>
@@ -191,18 +190,16 @@ const nextImg = () => {
     localStorage.setItem(idGame, Number(localStorage.getItem(idGame)) + 1);
     changeImg(localStorage.getItem(idGame));
     loadBtns(localStorage.getItem(idGame));
-    changeHint(Number(localStorage.getItem(idGame)) - 1);
+    changeHint(Number(localStorage.getItem(idGame))-1);
 }
 
 // A realizar una vez cargado el contenido del DOM
 document.addEventListener("DOMContentLoaded", () => {
 
     loadHints();
-    if (localStorage.getItem(urlParams + "-status") == "-") {
+    if (localStorage.getItem(urlParams+"-status") == "-") {
         loadBtns(localStorage.getItem(idGame));
-        setTimeout(() => {
-            autocomplete(document.getElementById("myInput"), gameList)
-        }, 1000);
+        autocomplete(document.getElementById("myInput"), gameList);
     }
     else {
         if (localStorage.getItem(urlParams + "-status") == "win")
@@ -210,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else
             loadDefeat();
     }
+
 });
 
 // Cambiar imagen
@@ -244,7 +242,7 @@ const changeHint = (id) => {
 }
 function autocomplete(inp, arr) {
     var currentFocus;
-    inp.addEventListener("input", function (e) {
+    inp.addEventListener("input", function(e) {
         var a, b, i, val = this.value;
         closeAllLists();
         if (!val) { return false; }
@@ -258,7 +256,7 @@ function autocomplete(inp, arr) {
                 b = document.createElement("DIV");
                 b.innerHTML = arr[i].replace(new RegExp(val, "gi"), "<strong>$&</strong>");
                 b.innerHTML += `<input type='hidden' value="${arr[i]}">`;
-                b.addEventListener("click", function (e) {
+                b.addEventListener("click", function(e) {
                     inp.value = this.getElementsByTagName("input")[0].value;
                     result = this.getElementsByTagName("input")[0].value;
                     closeAllLists();
@@ -267,7 +265,7 @@ function autocomplete(inp, arr) {
             }
         }
     });
-    inp.addEventListener("keydown", function (e) {
+    inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
         if (x) x = x.getElementsByTagName("div");
         if (e.keyCode == 40) {
@@ -303,7 +301,7 @@ function autocomplete(inp, arr) {
             }
         }
     }
-    document.addEventListener("click", function (e) {
+    document.addEventListener("click", function(e) {
         closeAllLists(e.target);
     });
 }

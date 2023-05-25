@@ -411,14 +411,12 @@ document.addEventListener("DOMContentLoaded", () => {
         loadLost();
     }
     reloadFrontViews();
-    
+    autocomplete(document.getElementById("myInput"), gameList);
+
     if (localStorage.getItem("guessTheCoverWin")) {
         loadWin();
     }
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
-    setTimeout(() => {
-        autocomplete(document.getElementById("myInput"), gameList)
-    }, 1000);
 });
 
 
