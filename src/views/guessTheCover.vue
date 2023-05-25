@@ -420,10 +420,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadAutocomplete() {
-    setTimeout(
-        autocomplete(document.getElementById("myInput"), gameList),
-        1000
-    )
+    setTimeout(() => {
+        autocomplete(document.getElementById("myInput"), gameList)
+    }, 1000);
 }
 function autocomplete(inp, arr) {
     var currentFocus;
