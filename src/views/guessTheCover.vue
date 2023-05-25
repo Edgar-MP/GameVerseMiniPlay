@@ -411,15 +411,20 @@ document.addEventListener("DOMContentLoaded", () => {
         loadLost();
     }
     reloadFrontViews();
-    autocomplete(document.getElementById("myInput"), gameList);
-
+    // autocomplete(document.getElementById("myInput"), gameList);
+    loadAutocomplete
     if (localStorage.getItem("guessTheCoverWin")) {
         loadWin();
     }
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
 });
 
-
+function loadAutocomplete() {
+    setTimeout(
+        autocomplete(document.getElementById("myInput"), gameList),
+        1000
+    )
+}
 function autocomplete(inp, arr) {
     var currentFocus;
     inp.addEventListener("input", function(e) {
