@@ -487,4 +487,3 @@ function autocomplete(inp, arr) {
 }
 
 </script>
-*/
