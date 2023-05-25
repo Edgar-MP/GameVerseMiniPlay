@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     document.getElementById("allwaysMaxWins").innerHTML = localStorage.getItem("allwaysMaxWins");
     setTimeout(() => {
-        autocomplete(document.getElementById("myInput"), gameList);
+        autocomplete(document.getElementById("myInput"), gameList)
     }, 1000);
 });
 

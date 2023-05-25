@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem(urlParams + "-status") == "-") {
         loadBtns(localStorage.getItem(idGame));
         setTimeout(() => {
-            autocomplete(document.getElementById("myInput"), gameList);
+            autocomplete(document.getElementById("myInput"), gameList)
         }, 1000);
     }
     else {
